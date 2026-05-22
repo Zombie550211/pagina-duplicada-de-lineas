@@ -689,7 +689,6 @@ export default function Home() {
       <footer className="footer" id="contacto">
         <div className="footer-grid">
           <div className="footer-brand">
-            <Image src="/images/Connecting_logo.webp" alt="Connecting" width={120} height={30} style={{ filter: 'brightness(10)', marginBottom: '1.2rem' }} />
             <p>Proveedor independiente de servicios móviles en las mejores redes 5G de Estados Unidos. Texas, EE.UU.</p>
           </div>
           <div className="footer-col">
