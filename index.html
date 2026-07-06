@@ -14,7 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <noscript><style>.reveal{opacity:1!important;transform:none!important;}</style></noscript>
 <!-- Google Ads tag + Consent Mode v2 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18041554210"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18023363833"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -28,8 +28,7 @@
     wait_for_update:   _storedConsent ? 0 : 600
   });
   gtag('js', new Date());
-  gtag('config', 'AW-18041554210', { url_passthrough: true });
-  gtag('config', 'AW-18264084077');
+  gtag('config', 'AW-18023363833');
 </script>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1225,7 +1224,6 @@
 (function(){
   document.querySelectorAll('a[href^="tel:"]').forEach(function(link){
     link.addEventListener('click',function(){
-      gtag('event','conversion',{send_to:'AW-18264084077/RzHpCNfQ7MMcEO2c_4RE',value:1.0,currency:'USD',transaction_id:''});
       gtag('event','phone_call_click',{phone_number:link.href.replace('tel:','')});
     });
   });

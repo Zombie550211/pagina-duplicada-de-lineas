@@ -14,7 +14,7 @@
 <!-- Google Fonts: display=optional elimina CLS por font-swap -->
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Nunito:wght@300;400;600;800&display=optional" rel="stylesheet">
 <!-- Google Ads tag + Consent Mode v2 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11148367992"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18023363833"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -32,8 +32,7 @@
   });
 
   gtag('js', new Date());
-  gtag('config', 'AW-11148367992');
-  gtag('config', 'AW-18264084077');
+  gtag('config', 'AW-18023363833');
 </script>
 <style>
   :root {
@@ -686,12 +685,6 @@
   // ── Conversión de llamada ──
   document.querySelectorAll('a[href^="tel:"]').forEach(function (link) {
     link.addEventListener('click', function () {
-      gtag('event', 'conversion', {
-        send_to: 'AW-18264084077/RzHpCNfQ7MMcEO2c_4RE',
-        value: 1.0,
-        currency: 'USD',
-        transaction_id: ''
-      });
       gtag('event', 'phone_call_click', {
         phone_number: link.href.replace('tel:', '')
       });
