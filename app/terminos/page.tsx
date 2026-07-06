@@ -49,8 +49,8 @@ const sections = [
   },
   {
     title: 'Contacto',
-    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en lineas-moviles.com o llamando al +1 (888) 780-1251.',
-    phone: '+18887801251',
+    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en lineas-moviles.com o llamando al +1 (888) 861-7317.',
+    phone: '+18888617317',
   },
 ]
 
@@ -90,10 +90,10 @@ export default function TerminosPage() {
             )}
             {s.body.split('\n\n').map((para, j) => (
               <p key={j} style={{ fontSize: '.95rem', color: '#475569', lineHeight: 1.8, marginBottom: '.8rem' }}>
-                {s.phone && para.includes('+1 (888) 780-1251') ? (
+                {s.phone && para.includes('+1 (888) 861-7317') ? (
                   <>
-                    {para.replace('+1 (888) 780-1251', '')}
-                    <a href={`tel:${s.phone}`} style={{ color: '#1D4ED8', fontWeight: 700 }}>+1 (888) 780-1251</a>
+                    {para.replace('+1 (888) 861-7317', '')}
+                    <a href={`tel:${s.phone}`} style={{ color: '#1D4ED8', fontWeight: 700 }}>+1 (888) 861-7317</a>
                   </>
                 ) : para}
               </p>

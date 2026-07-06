@@ -41,7 +41,7 @@ export default function PrivacidadPage() {
           },
           {
             title: '7. Consentimiento TCPA',
-            body: 'Al proporcionar su número de teléfono en nuestros formularios, usted autoriza expresamente a Connecting a contactarle mediante llamadas telefónicas y/o mensajes de texto (SMS) automatizados o preregistrados, relativos a nuestros servicios de telecomunicaciones. Este consentimiento no es condición para la compra de ningún servicio. Puede revocar su consentimiento en cualquier momento llamando al +1 (888) 780-1251. Aplican tarifas de mensajes y datos.',
+            body: 'Al proporcionar su número de teléfono en nuestros formularios, usted autoriza expresamente a Connecting a contactarle mediante llamadas telefónicas y/o mensajes de texto (SMS) automatizados o preregistrados, relativos a nuestros servicios de telecomunicaciones. Este consentimiento no es condición para la compra de ningún servicio. Puede revocar su consentimiento en cualquier momento llamando al +1 (888) 861-7317. Aplican tarifas de mensajes y datos.',
           },
         ].map((card, i) => (
           <div key={i} style={{ background: '#fff', border: '1px solid #E2E8F0', borderRadius: 20, padding: '2rem 2.2rem', marginBottom: '1.5rem', boxShadow: '0 1px 3px rgba(0,0,0,.06)' }}>

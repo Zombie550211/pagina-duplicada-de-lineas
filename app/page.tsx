@@ -11,9 +11,8 @@ declare global {
   }
 }
 
-const PHONE = '+18887801251'
-const PHONE_DISPLAY = '+1 (888) 780-1251'
-const CONVERSION_ID = 'AW-11148367992/CONVERSION_LABEL'
+const PHONE = '+18888617317'
+const PHONE_DISPLAY = '+1 (888) 861-7317'
 
 const heroSlides = [
   { src: '/images/hablando_por_telefono.webp', alt: 'Planes Móviles' },
@@ -332,7 +331,6 @@ export default function Home() {
 
   /* phone click */
   const onPhoneClick = () => {
-    window.gtag?.('event', 'conversion', { send_to: CONVERSION_ID, event_callback: () => {} })
     window.gtag?.('event', 'conversion', { send_to: 'AW-18264084077/RzHpCNfQ7MMcEO2c_4RE', value: 1.0, currency: 'USD', transaction_id: '' })
     window.gtag?.('event', 'phone_call_click', { phone_number: PHONE })
   }
