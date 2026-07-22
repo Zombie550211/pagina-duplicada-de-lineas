@@ -1207,7 +1207,10 @@
     })
     .then(function(r){ return r.json(); })
     .then(function(){
-      if(window.gtag) gtag('event','lead_magnet_submit',{name:name,phone:phone});
+      if(window.gtag){
+        gtag('event','lead_magnet_submit',{name:name,phone:phone});
+        gtag('event','conversion',{'send_to':'AW-18023363833/vhjLCP_PgMwcEPnpmpJD'});
+      }
       form.style.display='none';
       document.getElementById('lm-success').style.display='block';
     })
