@@ -57,14 +57,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://www.googletagmanager.com/gtag/js?id=AW-18023363833"
           strategy="afterInteractive"
         />
-        <Script
-          src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"
-          strategy="afterInteractive"
-        />
-        <Script
-          src="https://files.bpcontent.cloud/2026/04/18/01/20260418013659-Y2Z6AC4H.js"
-          strategy="afterInteractive"
-        />
+        {process.env.NODE_ENV !== 'production' && (
+          <>
+            <Script
+              src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"
+              strategy="afterInteractive"
+            />
+            <Script
+              src="https://files.bpcontent.cloud/2026/04/18/01/20260418013659-Y2Z6AC4H.js"
+              strategy="afterInteractive"
+            />
+          </>
+        )}
       </body>
     </html>
   )

@@ -34,6 +34,11 @@ function checkRateLimit(ip: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  // Captacion de leads deshabilitada en produccion: la ruta no existe fuera de local.
+  if (process.env.NODE_ENV === 'production') {
+    return new NextResponse(null, { status: 404 })
+  }
+
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0] ?? 'unknown'
   if (!checkRateLimit(ip)) {
     return NextResponse.json({ error: 'Demasiadas solicitudes. Intenta en 15 minutos.' }, { status: 429 })

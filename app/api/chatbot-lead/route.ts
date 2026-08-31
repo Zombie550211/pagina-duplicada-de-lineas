@@ -3,6 +3,11 @@ import { NextResponse } from 'next/server'
 const CRM_WEBHOOK = 'https://agentes-49dr.onrender.com/api/webhook/lineas'
 
 export async function POST(req: Request) {
+  // Captacion de leads deshabilitada en produccion: la ruta no existe fuera de local.
+  if (process.env.NODE_ENV === 'production') {
+    return new NextResponse(null, { status: 404 })
+  }
+
   try {
     const apiKey = process.env.WEBHOOK_LINEAS_KEY
     if (!apiKey) {

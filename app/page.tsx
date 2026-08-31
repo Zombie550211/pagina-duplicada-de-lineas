@@ -11,6 +11,10 @@ declare global {
   }
 }
 
+// Captacion de leads (formulario + chatbot) solo en desarrollo local.
+// En el build de produccion NODE_ENV es 'production' y todo esto sale del bundle.
+const LEAD_TOOLS = process.env.NODE_ENV !== 'production'
+
 const PHONE = '+18884702820'
 const PHONE_DISPLAY = '+1 (888) 470-2820'
 
@@ -249,8 +253,9 @@ export default function Home() {
     if (!localStorage.getItem('cookie_consent')) setCookieVisible(true)
   }, [])
 
-  /* botpress lead capture — client-side relay */
+  /* botpress lead capture — client-side relay (solo local) */
   useEffect(() => {
+    if (!LEAD_TOOLS) return
     let lastBotText = ''
     let capturedNombre = ''
 
@@ -654,7 +659,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* LEAD MAGNET */}
+      {/* LEAD MAGNET — solo local */}
+      {LEAD_TOOLS && (
       <section className="lead-section">
         <span className="lead-eyebrow">Contacto Directo</span>
         <h2>¿No puedes<br /><em>llamar ahora?</em></h2>
@@ -682,6 +688,7 @@ export default function Home() {
         </p>
         <p className="lead-note">No compartimos tus datos. Solo te contactamos una vez.</p>
       </section>
+      )}
 
       {/* FOOTER */}
       <footer className="footer" id="contacto">
