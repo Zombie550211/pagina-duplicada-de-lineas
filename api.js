@@ -11,7 +11,7 @@ app.disable("x-powered-by");
 
 app.use(express.json({ limit: "16kb" }));
 
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://lineas-moviles.com";
+const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || "https://linea-latina.com";
 
 app.use((req, res, next) => {
   const origin = req.headers.origin;

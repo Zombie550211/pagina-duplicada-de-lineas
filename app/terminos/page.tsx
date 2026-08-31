@@ -4,20 +4,20 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | Connecting',
-  description: 'Términos y condiciones de servicio de lineas-moviles.com. Connecting opera como call center autorizado para servicios de telecomunicaciones.',
-  alternates: { canonical: 'https://lineas-moviles.com/terminos' },
+  description: 'Términos y condiciones de servicio de linea-latina.com. Connecting opera como call center autorizado para servicios de telecomunicaciones.',
+  alternates: { canonical: 'https://linea-latina.com/terminos' },
 }
 
 const sections = [
   {
     title: null,
     highlight: true,
-    body: 'Este documento rige el uso de nuestro sitio web. Al navegar en lineas-moviles.com, el usuario acepta que la información de planes y precios está sujeta a cambios por parte de los proveedores. Nosotros proporcionamos asesoría informativa y técnica, pero el contrato final de servicio se establece entre el cliente y la compañía proveedora seleccionada.\n\nConnecting opera como call center de atención al cliente para servicios de telefonía móvil. Nuestros agentes autorizados atienden llamadas entrantes para verificar disponibilidad y conectar a los usuarios con proveedores participantes.',
+    body: 'Este documento rige el uso de nuestro sitio web. Al navegar en linea-latina.com, el usuario acepta que la información de planes y precios está sujeta a cambios por parte de los proveedores. Nosotros proporcionamos asesoría informativa y técnica, pero el contrato final de servicio se establece entre el cliente y la compañía proveedora seleccionada.\n\nConnecting opera como call center de atención al cliente para servicios de telefonía móvil. Nuestros agentes autorizados atienden llamadas entrantes para verificar disponibilidad y conectar a los usuarios con proveedores participantes.',
     bullets: ['No somos el proveedor directo del servicio.', 'La disponibilidad y precios pueden variar según ubicación.'],
   },
   {
     title: 'Descripción de los Servicios',
-    body: 'lineas-moviles.com actúa como agente independiente de servicios de telecomunicaciones, facilitando el acceso a:\n• Telefonía Móvil E-SIM o SIM Física: Planes de voz, texto y datos mediante redes inalámbricas.\n• Telefonía Móvil y Dispositivos con financiamiento: Planes de redes ilimitadas, llamadas ilimitadas dentro de todo el continente americano.',
+    body: 'linea-latina.com actúa como agente independiente de servicios de telecomunicaciones, facilitando el acceso a:\n• Telefonía Móvil E-SIM o SIM Física: Planes de voz, texto y datos mediante redes inalámbricas.\n• Telefonía Móvil y Dispositivos con financiamiento: Planes de redes ilimitadas, llamadas ilimitadas dentro de todo el continente americano.',
   },
   {
     title: 'Elegibilidad y Contratación',
@@ -25,7 +25,7 @@ const sections = [
   },
   {
     title: 'Política de Uso Aceptable',
-    body: 'Protegemos tus datos personales conforme a la ley. Los datos recabados en nuestros formularios se utilizan exclusivamente para contactarte y gestionar tu solicitud de servicio.\n\nDivulgación de Afiliación: lineas-moviles.com puede recibir una comisión por parte de los proveedores de servicios cuando un usuario realiza una contratación a través de nuestra plataforma. Esto no genera un costo adicional para el usuario y nos permite mantener nuestro servicio de asesoría gratuito.',
+    body: 'Protegemos tus datos personales conforme a la ley. Los datos recabados en nuestros formularios se utilizan exclusivamente para contactarte y gestionar tu solicitud de servicio.\n\nDivulgación de Afiliación: linea-latina.com puede recibir una comisión por parte de los proveedores de servicios cuando un usuario realiza una contratación a través de nuestra plataforma. Esto no genera un costo adicional para el usuario y nos permite mantener nuestro servicio de asesoría gratuito.',
   },
   {
     title: 'Tarifas, Facturación y Pagos',
@@ -37,7 +37,7 @@ const sections = [
   },
   {
     title: 'Limitación de Responsabilidad',
-    body: 'lineas-moviles.com no se hará cargo de:\n• Problemas con el servicio causados por el clima, arreglos en la red o errores en los aparatos del cliente.\n• La pérdida o el daño de información derivado del uso del servicio móvil.\n• La velocidad de datos móviles, que puede variar según la ubicación, cobertura y congestión de la red del operador.',
+    body: 'linea-latina.com no se hará cargo de:\n• Problemas con el servicio causados por el clima, arreglos en la red o errores en los aparatos del cliente.\n• La pérdida o el daño de información derivado del uso del servicio móvil.\n• La velocidad de datos móviles, que puede variar según la ubicación, cobertura y congestión de la red del operador.',
   },
   {
     title: 'Privacidad de los Datos',
@@ -49,7 +49,7 @@ const sections = [
   },
   {
     title: 'Contacto',
-    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en lineas-moviles.com o llamando al +1 (888) 470-2820.',
+    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en linea-latina.com o llamando al +1 (888) 470-2820.',
     phone: '+18884702820',
   },
 ]

@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   description:
     'Planes de líneas móviles 5G desde $55/mes. Sin contratos, soporte en español, activación rápida. Cobertura en el 99% de Estados Unidos para tu familia.',
   robots: { index: true, follow: true },
-  alternates: { canonical: 'https://lineas-moviles.com' },
+  alternates: { canonical: 'https://linea-latina.com' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

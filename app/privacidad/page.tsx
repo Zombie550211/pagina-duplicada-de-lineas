@@ -4,8 +4,8 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Política de Privacidad | Connecting',
-  description: 'Política de privacidad de lineas-moviles.com. Conoce cómo protegemos tus datos personales.',
-  alternates: { canonical: 'https://lineas-moviles.com/privacidad' },
+  description: 'Política de privacidad de linea-latina.com. Conoce cómo protegemos tus datos personales.',
+  alternates: { canonical: 'https://linea-latina.com/privacidad' },
 }
 
 export default function PrivacidadPage() {
@@ -26,7 +26,7 @@ export default function PrivacidadPage() {
         <p style={{ fontSize: '.83rem', color: '#94A3B8', marginBottom: '2.5rem' }}>Última actualización: 2026</p>
 
         {[
-          { title: null, body: 'En lineas-moviles.com, nos preocupamos por su privacidad y nos dedicamos a cuidar sus datos personales. Este documento explica de qué manera obtenemos, manejamos y resguardamos su información cuando navega en nuestro sitio web o usa nuestros servicios de telefonía móvil en Estados Unidos.' },
+          { title: null, body: 'En linea-latina.com, nos preocupamos por su privacidad y nos dedicamos a cuidar sus datos personales. Este documento explica de qué manera obtenemos, manejamos y resguardamos su información cuando navega en nuestro sitio web o usa nuestros servicios de telefonía móvil en Estados Unidos.' },
           { title: '1. Información que Recopilamos', body: 'Para brindarle nuestros servicios de telecomunicaciones, es posible que recopilemos: nombre, número de teléfono, correo electrónico e identificación necesaria para activar su línea móvil.' },
           { title: '2. Uso de la Información', body: 'Usamos los datos que recopilamos para tramitar sus pedidos de servicio y habilitar sus líneas móviles.' },
           { title: '3. Compartición de Datos con Terceros', body: 'No comercializamos ni arrendamos sus datos personales a otras empresas.' },
