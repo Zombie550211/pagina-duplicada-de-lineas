@@ -1,0 +1,77 @@
+# Infraestructura — linea-latina.com
+
+Migrado de Render a AWS el 31 de agosto de 2026. Render ya no interviene en el hosting.
+
+## Dónde vive
+
+| Pieza | Valor |
+|---|---|
+| Dominio | `linea-latina.com` (+ `www`) |
+| Hosting | AWS Amplify Hosting, app `d315xicjzn1gix`, región `us-east-2` |
+| Plataforma | `WEB_COMPUTE` — Next.js 16 con SSR y API routes |
+| CDN + TLS | CloudFront con certificado ACM `*.linea-latina.com` |
+| DNS | Route 53 (hosted zone propia) |
+| Registrador | Hostinger — solo registro y renovación; los NS apuntan a AWS |
+| Cuenta AWS | `964060772387` |
+| Repo | `Zombie550211/pagina-duplicada-de-lineas`, rama `main` |
+
+Nameservers delegados: `ns-656.awsdns-18.net`, `ns-76.awsdns-09.com`,
+`ns-1796.awsdns-32.co.uk`, `ns-1109.awsdns-10.org`.
+
+**No revertir los nameservers a Hostinger:** su zona antigua sigue apuntando a un servicio de
+Render suspendido y tumbaría el sitio.
+
+## Despliegue
+
+Push a `main` → Amplify construye y publica solo. El build spec es `amplify.yml` del repo;
+no editarlo desde la consola, porque una copia guardada ahí tiene precedencia sobre el del
+repositorio.
+
+Variable de entorno en Amplify: `NODE_ENV=production`.
+
+## Captación de leads: solo en local
+
+El formulario y el chatbot de Botpress existen en el código pero **no se compilan ni se sirven en
+producción**. Están atados a `NODE_ENV`, no a una variable de la consola, así que no se pueden
+activar por accidente desde Amplify.
+
+| Elemento | Producción | `npm run dev` |
+|---|---|---|
+| Sección del formulario | no se renderiza | funciona |
+| Scripts de Botpress | no se cargan | funcionan |
+| `/api/contact` | 404 | funciona |
+| `/api/chatbot-lead` | 404 | funciona |
+
+En local, `/api/contact` necesita `RESEND_API_KEY` y `/api/chatbot-lead` necesita
+`WEBHOOK_LINEAS_KEY` (la que valida el CRM). Ponlas en `.env.local`, nunca en el repo.
+
+La única conversión medible en producción es el clic a teléfono (`phone_call_click`), con el tag
+`AW-18023363833`.
+
+## Seguridad
+
+`next.config.ts` emite HSTS, CSP, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`
+y `Permissions-Policy`; `poweredByHeader` desactivado. Amplify no inyecta ninguna por su cuenta.
+Fuera de local, el CSP no incluye los dominios de Botpress.
+
+## Deuda técnica
+
+1. **`index.html` duplica `app/page.tsx`.** Next 16 no sirve el HTML de la raíz: la página real es
+   `app/page.tsx`. El commit `c2917c0` metió la conversión de formulario solo en `index.html`.
+   Hoy da igual —no hay formulario en producción—, pero los dos archivos siguen divergiendo.
+2. **Rate limit en memoria.** `app/api/contact/route.ts` usa un `Map` por instancia: inservible en
+   el compute serverless si algún día se reactiva la ruta en producción. Mitigación: regla
+   rate-based de AWS WAF o un contador en DynamoDB.
+3. **`www` no redirige al apex**, sirve el mismo contenido en paralelo: contenido duplicado para
+   Google. Se configura en Amplify → Dominios personalizados.
+4. **Sin SPF ni DMARC** en la zona. Cualquiera puede falsificar correo desde `@linea-latina.com`.
+   Se resuelve con dos registros TXT en Route 53:
+   `linea-latina.com TXT "v=spf1 -all"` y
+   `_dmarc.linea-latina.com TXT "v=DMARC1; p=reject; rua=mailto:<tu-correo>"`.
+5. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
+
+## El CRM es otro sistema
+
+`app/api/chatbot-lead/route.ts` reenvía al webhook del CRM en
+`agentes-49dr.onrender.com`. Ese servicio **sigue en Render** y es independiente de esta landing:
+no se toca en esta migración. Solo se invoca en local.
