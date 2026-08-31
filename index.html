@@ -1201,7 +1201,7 @@
     var address = document.getElementById('lm-address').value.trim();
     if(!name || !phone || !email || !address) return;
     btn.disabled = true; btn.textContent = 'Enviando...';
-    fetch('https://lineas-moviles-api.onrender.com/api/contact',{
+    fetch('/api/contact',{
       method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({name:name, phone:phone, email:email, address:address})
     })

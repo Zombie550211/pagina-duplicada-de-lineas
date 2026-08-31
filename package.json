@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zombie550211/Page-Lineas-moviles.git"
+    "url": "git+https://github.com/Zombie550211/pagina-duplicada-de-lineas.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zombie550211/Page-Lineas-moviles/issues"
+    "url": "https://github.com/Zombie550211/pagina-duplicada-de-lineas/issues"
   },
-  "homepage": "https://github.com/Zombie550211/Page-Lineas-moviles#readme",
+  "homepage": "https://github.com/Zombie550211/pagina-duplicada-de-lineas#readme",
   "dependencies": {
     "express": "^5.2.1",
     "express-rate-limit": "^8.3.2",
