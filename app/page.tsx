@@ -15,6 +15,17 @@ declare global {
 // En el build de produccion NODE_ENV es 'production' y todo esto sale del bundle.
 const LEAD_TOOLS = process.env.NODE_ENV !== 'production'
 
+// TCPA: el consentimiento debe ser expreso, por escrito y demostrable. Este texto
+// es el que ve el usuario y el que se archiva con el lead — cambiarlo invalida los
+// consentimientos ya recogidos bajo la version anterior.
+const TCPA_CONSENT_TEXT =
+  'Autorizo a Connecting S.A. de C.V. y a los proveedores participantes a contactarme al ' +
+  'número que proporcioné, mediante llamadas y mensajes de texto, incluidos sistemas ' +
+  'automatizados o mensajes pregrabados, con fines comerciales. Entiendo que este ' +
+  'consentimiento no es condición para contratar ningún servicio y que puedo revocarlo en ' +
+  'cualquier momento respondiendo STOP o pidiéndolo a un asesor. Aplican tarifas de ' +
+  'mensajes y datos.'
+
 const PHONE = '+18884702820'
 const PHONE_DISPLAY = '+1 (888) 470-2820'
 
@@ -87,11 +98,19 @@ const faqs = [
   },
   {
     q: '¿El precio de mi factura cambiará después de unos meses?',
-    a: 'No. Ofrecemos un bill fijo. El precio que contratas es el que pagas mes a mes, sin cargos ocultos ni "tarifas de promoción" que expiran después de un tiempo.',
+    a: 'El precio base del plan no sube por promociones que expiran. Aparte del plan se facturan los impuestos y cargos regulatorios, que varían según tu estado y el proveedor. Te desglosamos el total estimado antes de que contrates.',
   },
   {
-    q: '¿Qué significa que el internet sea "ilimitado"?',
-    a: 'Significa que no tenemos límites de datos (data caps). Puedes navegar, ver películas en 4K, jugar en línea y trabajar todo el mes sin preocuparte por reducciones de velocidad o cargos extra por consumo.',
+    q: '¿Qué significa que los datos móviles sean "ilimitados"?',
+    a: 'Significa que no pagas cargos extra por consumo. Ten en cuenta que los proveedores aplican priorización de red a partir de cierto consumo mensual, lo que puede reducir la velocidad en horas de congestión. El umbral en GB depende del proveedor y del plan; te lo confirmamos antes de que contrates.',
+  },
+  {
+    q: '¿En qué condiciones viene el equipo?',
+    a: 'Depende del proveedor y del plan. Según el caso el equipo puede entrar financiado a plazos, con un pago inicial o sujeto a permanencia mínima para conservar el descuento. No entregamos equipos por nuestra cuenta: las condiciones, la garantía y el financiamiento los fija el proveedor, y te las explicamos en detalle antes de que firmes.',
+  },
+  {
+    q: '¿Con qué proveedores trabajan?',
+    a: 'Somos un agente independiente y trabajamos con varios proveedores de servicios móviles en Estados Unidos. No pertenecemos a ninguno de ellos. Revisamos contigo cuál conviene más según tu zona, tu presupuesto y el uso que le des a la línea.',
   },
   {
     q: '¿Necesito una verificación de crédito para aplicar?',
@@ -99,11 +118,11 @@ const faqs = [
   },
   {
     q: '¿Cuánto tiempo tarda el envío del equipo?',
-    a: 'Una vez aprobada tu solicitud, solemos agendar el envío en un plazo de 24 a 72 horas hábiles.',
+    a: 'Una vez aprobada tu solicitud, solemos agendar el envío en un plazo de 24 a 72 horas hábiles. El plazo final lo define el proveedor que elijas.',
   },
   {
-    q: '¿Puedo cambiar mi plan de velocidad más adelante?',
-    a: '¡Por supuesto! Al no haber contrato, tienes la flexibilidad de subir o bajar la velocidad de tu plan según tus necesidades actuales, sin complicaciones.',
+    q: '¿Puedo cambiar de plan más adelante?',
+    a: '¡Por supuesto! Al no haber contrato, puedes subir o bajar de plan según tus necesidades. Como trabajamos con varios proveedores, también podemos revisar contigo si otro se ajusta mejor.',
   },
 ]
 
@@ -113,12 +132,12 @@ export default function Home() {
   const [carouselIdx, setCarouselIdx]   = useState(0)
   const carouselTimer                    = useRef<ReturnType<typeof setInterval> | null>(null)
   const [openFaq, setOpenFaq]           = useState<number | null>(null)
-  const [form, setForm]                 = useState({ name: '', phone: '', email: '', address: '' })
+  const [form, setForm]                 = useState({ name: '', phone: '', email: '', address: '', consent: false })
   const [formState, setFormState]       = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [cookieVisible, setCookieVisible] = useState(false)
   const [scrollPct, setScrollPct]       = useState(0)
   const [statsVisible, setStatsVisible] = useState(false)
-  const [cnt, setCnt]                   = useState([0, 0, 0])
+  const [cnt, setCnt]                   = useState(0)
   const planRefs                         = useRef<(HTMLDivElement | null)[]>([null, null, null])
   const canvasRef                        = useRef<HTMLCanvasElement>(null)
 
@@ -197,13 +216,12 @@ export default function Home() {
 
   useEffect(() => {
     if (!statsVisible) return
-    const targets = [10, 99, 55]
     const dur = 1600
     const t0 = performance.now()
     const tick = (now: number) => {
       const p = Math.min((now - t0) / dur, 1)
       const ease = 1 - (1 - p) ** 3
-      setCnt(targets.map(v => Math.round(v * ease)))
+      setCnt(Math.round(55 * ease))
       if (p < 1) requestAnimationFrame(tick)
     }
     requestAnimationFrame(tick)
@@ -253,68 +271,6 @@ export default function Home() {
     if (!localStorage.getItem('cookie_consent')) setCookieVisible(true)
   }, [])
 
-  /* botpress lead capture — client-side relay (solo local) */
-  useEffect(() => {
-    if (!LEAD_TOOLS) return
-    let lastBotText = ''
-    let capturedNombre = ''
-
-    const sendLead = (nombre: string, telefono: string) => {
-      fetch('/api/chatbot-lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, telefono, fuente: 'Chatbot AI' }),
-      }).catch(() => {})
-    }
-
-    const process = (text: string, isBot: boolean) => {
-      if (!text) return
-      if (isBot) {
-        lastBotText = text.toLowerCase()
-      } else {
-        if (lastBotText.includes('nombre')) {
-          capturedNombre = text
-        } else if ((lastBotText.includes('teléfono') || lastBotText.includes('telefono')) && capturedNombre) {
-          sendLead(capturedNombre, text)
-          capturedNombre = ''
-        }
-      }
-    }
-
-    // API nativa window.botpress.on('message', ...) — Botpress webchat v3
-    // Payload structure: { id, authorId, block: { block: { text } }, metadata?: { clientMessageId } }
-    // User messages have metadata.clientMessageId; bot messages don't
-    const setupBotpress = () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const bp = (window as any).botpress
-      if (!bp?.on) return
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      bp.on('message', (msg: any) => {
-        const text  = String(msg?.block?.block?.text ?? '')
-        const isUser = !!msg?.metadata?.clientMessageId
-        if (text) process(text, !isUser)
-      })
-    }
-
-    // postMessage fallback
-    const onMsg = (e: MessageEvent) => {
-      try {
-        const d = e.data
-        if (!d || typeof d !== 'object') return
-        const text = String(d?.block?.block?.text || d?.payload?.block?.block?.text || '')
-        if (!text) return
-        const isUser = !!(d?.metadata?.clientMessageId || d?.payload?.metadata?.clientMessageId)
-        process(text, !isUser)
-      } catch { /* silencioso */ }
-    }
-
-    window.addEventListener('message', onMsg)
-    if ((window as any).botpress?.on) setupBotpress()   // eslint-disable-line @typescript-eslint/no-explicit-any
-    else setTimeout(setupBotpress, 4000)
-
-    return () => window.removeEventListener('message', onMsg)
-  }, [])
-
   /* reveal on scroll */
   useEffect(() => {
     const els = document.querySelectorAll<HTMLElement>('.reveal')
@@ -348,14 +304,19 @@ export default function Home() {
   /* form */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { name, phone, email, address } = form
-    if (!name || !phone || !email || !address) return
+    const { name, phone, email, address, consent } = form
+    if (!name || !phone || !email || !address || !consent) return
     setFormState('loading')
     try {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, email, address }),
+        body: JSON.stringify({
+          name, phone, email, address,
+          consent: true,
+          consentText: TCPA_CONSENT_TEXT,
+          consentAt: new Date().toISOString(),
+        }),
       })
       const data = await res.json()
       if (data.ok) {
@@ -392,6 +353,7 @@ export default function Home() {
           <Link href="#servicios" className="nav-link">Servicios</Link>
           <Link href="#familiar"  className="nav-link">Familias</Link>
           <Link href="#planes"    className="nav-link">Planes</Link>
+          <Link href="#quienes-somos" className="nav-link">Nosotros</Link>
         </div>
 
         <div className="nav-right">
@@ -415,10 +377,10 @@ export default function Home() {
         </div>
         <div className="hero-content">
           <div className="hero-text">
-            <span className="hero-badge">+10,000 Familias Conectadas en USA</span>
-            <p className="hero-eyebrow">Red 5G activa en todo USA</p>
+            <span className="hero-badge">Conectamos familias en todo Estados Unidos</span>
+            <p className="hero-eyebrow">Redes 5G nacionales · Varios proveedores</p>
             <h1>Conecta a tu<br /><em>Familia</em> hoy.</h1>
-            <p className="hero-sub">Planes sin contratos desde $55/mes. Soporte 100% en español. Activa hoy mismo.</p>
+            <p className="hero-sub">Planes sin contratos desde $55/mes + impuestos. Soporte 100% en español. Activa hoy mismo.</p>
             <div className="hero-actions">
               <a href={`tel:${PHONE}`} className="btn-hero-main" onClick={onPhoneClick}>📞 Hablar con un Asesor</a>
               <Link href="#planes" className="btn-hero-ghost">Ver planes →</Link>
@@ -443,15 +405,15 @@ export default function Home() {
       <div className="stats-strip">
         {[
           {
-            num: `+${cnt[0]}K`, label: 'Clientes Satisfechos',
+            num: '0', label: 'Contratos Forzosos',
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
           },
           {
-            num: `${cnt[1]}%`, label: 'Cobertura Nacional',
+            num: 'USA', label: 'Cobertura Nacional',
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>,
           },
           {
-            num: `$${cnt[2]}`, label: 'Desde / mes',
+            num: `$${cnt}`, label: 'Desde / mes + imp.',
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
           },
           {
@@ -477,7 +439,7 @@ export default function Home() {
           {[
             {
               title: 'Sin contratos',
-              desc: 'Cancela cuando quieras. Sin penalizaciones, sin letra chica, sin compromisos forzosos.',
+              desc: 'Cancela cuando quieras. Sin penalizaciones por terminación anticipada ni permanencia forzosa.',
               icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
             },
             {
@@ -487,7 +449,7 @@ export default function Home() {
             },
             {
               title: 'Red 5G nacional',
-              desc: '99% de cobertura en todo Estados Unidos. La red más rápida, siempre contigo.',
+              desc: 'Cobertura nacional sobre las principales redes 5G del país. El alcance exacto depende del proveedor y plan que elijas.',
               icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>,
             },
             {
@@ -581,13 +543,13 @@ export default function Home() {
         <div className="section-header reveal">
           <span className="section-eyebrow">Precios Transparentes</span>
           <h2 className="section-title">Elige tu Plan.</h2>
-          <p className="section-sub">Sin letra chica. El precio que ves es el que pagas mes a mes.</p>
+          <p className="section-sub">Precio base del plan. Los impuestos y cargos regulatorios se facturan aparte y varían según tu estado y el proveedor.</p>
         </div>
         <div className="plans-grid">
           {[
-            { badge: 'Plan 01',    name: 'Básico',   price: '55',  features: ['Datos ilimitados 5G', 'Llamadas y mensajes ilimitados', 'Soporte 24/7 en español'],           featured: false },
-            { badge: 'Recomendado', name: 'Familiar', price: '150', features: ['Hasta 4 líneas incluidas', 'Datos ilimitados para todos', 'Descuentos por líneas adicionales'], featured: true  },
-            { badge: 'Plan 03',    name: 'Premium',  price: '90',  features: ['Datos ilimitados 5G', 'Incluye dispositivo de alta gama', 'Soporte en español 24/7'],          featured: false },
+            { badge: 'Plan 01',    name: 'Básico',   price: '55',  features: ['Datos ilimitados 5G', 'Llamadas y mensajes ilimitados', 'Soporte 24/7 en español'],           cond: 'Precio por línea, sin impuestos. Sujeto a disponibilidad del proveedor en tu zona.',      featured: false },
+            { badge: 'Recomendado', name: 'Familiar', price: '150', features: ['Hasta 4 líneas incluidas', 'Datos ilimitados para todos', 'Descuentos por líneas adicionales'], cond: 'Precio total por hasta 4 líneas, sin impuestos. Requiere activarlas con el mismo proveedor.', featured: true  },
+            { badge: 'Plan 03',    name: 'Premium',  price: '90',  features: ['Datos ilimitados 5G', 'Opción de dispositivo de alta gama', 'Soporte en español 24/7'],        cond: 'Precio por línea, sin impuestos. El dispositivo y sus condiciones los define el proveedor.',  featured: false },
           ].map((plan, i) => (
             <div
               key={i}
@@ -599,12 +561,14 @@ export default function Home() {
               <span className="plan-badge">{plan.badge}</span>
               <div className="plan-name">{plan.name}</div>
               <div className="plan-price"><sup>$</sup>{plan.price}<sub>/mes</sub></div>
+              <div className="plan-tax">+ impuestos y cargos regulatorios</div>
               <hr className="plan-divider" />
               <ul className="plan-features">
                 {plan.features.map((f, j) => <li key={j}>{f}</li>)}
               </ul>
               <a href={`tel:${PHONE}`} className="plan-cta" onClick={onPhoneClick}>Hablar con un Asesor</a>
-              <Link href="/terminos" className="plan-cond">*Condiciones Aplican</Link>
+              <p className="plan-cond">{plan.cond}</p>
+              <Link href="/terminos" className="plan-cond plan-cond-link">Ver condiciones completas</Link>
             </div>
           ))}
         </div>
@@ -617,8 +581,8 @@ export default function Home() {
         </div>
         <div className="split-content reveal reveal-delay-1">
           <span className="split-tag">Cobertura y Velocidad</span>
-          <h2>El 99% de<br /><em>Estados Unidos.</em></h2>
-          <p>Nuestra red cubre el 99% del territorio. Siempre conectado sin importar dónde te encuentres.</p>
+          <h2>Cobertura en<br /><em>todo el país.</em></h2>
+          <p>Trabajamos con varios proveedores sobre las principales redes 5G de Estados Unidos. Verificamos contigo la cobertura real en tu zona antes de que contrates.</p>
           <div><a href={`tel:${PHONE}`} className="btn-dark" onClick={onPhoneClick}>Verificar Cobertura</a></div>
         </div>
       </section>
@@ -633,6 +597,39 @@ export default function Home() {
         </div>
         <div className="split-image reveal reveal-delay-1">
           <Image src="/images/altavelocidad.webp" alt="Alta Velocidad 5G" fill style={{ objectFit: 'cover' }} />
+        </div>
+      </section>
+
+      {/* QUIENES SOMOS: identidad del anunciante exigida por Google Ads */}
+      <section className="about-section" id="quienes-somos">
+        <div className="about-header reveal">
+          <span className="section-eyebrow">Quiénes somos</span>
+          <h2 className="section-title">Un agente,<br /><em>no una red.</em></h2>
+        </div>
+        <div className="about-body reveal reveal-delay-1">
+          <p className="about-disclaimer">
+            Connecting S.A. de C.V. es un agente independiente de servicios móviles. Ayudamos a
+            consumidores en Estados Unidos a conocer opciones de telefonía móvil y conectarse con
+            proveedores participantes. No somos una compañía de red móvil ni afirmamos ser
+            representantes de ningún operador salvo cuando se indique expresamente.
+          </p>
+          <p>
+            No trabajamos con un solo operador: comparamos planes de <strong>varios proveedores</strong> y
+            te mostramos cuál se ajusta mejor a tu zona, tu presupuesto y tu consumo. Nuestros agentes
+            atienden en español, verifican la cobertura disponible en tu dirección y te explican las
+            alternativas antes de que contrates. El contrato final de servicio se establece entre tú y
+            la compañía proveedora que elijas.
+          </p>
+          <p>
+            Las marcas, nombres comerciales y logotipos de terceros que aparezcan en este sitio
+            pertenecen a sus respectivos titulares. Los planes, precios y disponibilidad los determina
+            cada proveedor y están sujetos a cambios sin previo aviso.
+          </p>
+          <div className="about-meta">
+            <span><strong>Razón social:</strong> Connecting S.A. de C.V.</span>
+            <span><strong>Operaciones:</strong> Texas, Estados Unidos</span>
+            <span><strong>Contacto:</strong> {PHONE_DISPLAY}</span>
+          </div>
         </div>
       </section>
 
@@ -675,7 +672,16 @@ export default function Home() {
             <input className="lead-input" type="tel"   placeholder="Número de teléfono" required value={form.phone}   onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
             <input className="lead-input" type="email" placeholder="Correo electrónico" required value={form.email}   onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
             <input className="lead-input" type="text"  placeholder="Dirección"          required value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} />
-            <button type="submit" className="lead-btn" disabled={formState === 'loading'}>
+            <label className="lead-consent">
+              <input
+                type="checkbox"
+                required
+                checked={form.consent}
+                onChange={e => setForm(f => ({ ...f, consent: e.target.checked }))}
+              />
+              <span>{TCPA_CONSENT_TEXT}</span>
+            </label>
+            <button type="submit" className="lead-btn" disabled={formState === 'loading' || !form.consent}>
               {formState === 'loading' ? 'Enviando...' : 'Que me llamen →'}
             </button>
           </form>
@@ -683,10 +689,10 @@ export default function Home() {
         {formState === 'error' && (
           <p style={{ marginTop: '12px', color: '#F87171', fontSize: '.85rem' }}>Error al enviar. Intenta de nuevo.</p>
         )}
-        <p style={{ fontSize: '.72rem', color: 'rgba(255,255,255,.25)', maxWidth: '540px', margin: '12px auto 0', lineHeight: '1.6' }}>
-          Al enviar este formulario, usted acepta recibir llamadas y mensajes de texto de Connecting relacionados con nuestros servicios. Puede solicitar que lo retiremos de nuestra lista de contacto en cualquier momento. Aplican tarifas de mensajes y datos.
+        <p className="lead-note">
+          Tratamos tus datos conforme a nuestra <Link href="/privacidad">Política de Privacidad</Link>.
+          Puedes pedir que te retiremos de la lista de contacto en cualquier momento.
         </p>
-        <p className="lead-note">No compartimos tus datos. Solo te contactamos una vez.</p>
       </section>
       )}
 
@@ -694,7 +700,10 @@ export default function Home() {
       <footer className="footer" id="contacto">
         <div className="footer-grid">
           <div className="footer-brand">
-            <p>Proveedor independiente de servicios móviles en las mejores redes 5G de Estados Unidos. Texas, EE.UU.</p>
+            <h4>Quiénes Somos</h4>
+            <p>Agente independiente de servicios móviles. Comparamos planes de varios proveedores participantes en las mejores redes 5G de Estados Unidos.</p>
+            <Link href="/#quienes-somos" className="footer-brand-link">Conocer más →</Link>
+            <p className="footer-brand-loc">Texas, EE.UU.</p>
           </div>
           <div className="footer-col">
             <h4>Servicios</h4>
@@ -705,6 +714,7 @@ export default function Home() {
           </div>
           <div className="footer-col">
             <h4>Empresa</h4>
+            <Link href="#quienes-somos">Quiénes Somos</Link>
             <Link href="#cobertura">Cobertura</Link>
             <Link href="#faq">Preguntas Frecuentes</Link>
             <Link href="/privacidad">Privacidad</Link>
@@ -717,11 +727,8 @@ export default function Home() {
             <a>Texas, Estados Unidos</a>
           </div>
         </div>
-        <a href={`tel:${PHONE}`} className="footer-call" onClick={onPhoneClick}>
-          📞 &nbsp;Llamar ahora — {PHONE_DISPLAY}
-        </a>
         <div className="footer-bottom">
-          <span>© 2026 Connecting S.A. de C.V. · Proveedor independiente de servicios móviles.</span>
+          <span>© 2026 Connecting S.A. de C.V. · Agente independiente de servicios móviles.</span>
           <span>
             <Link href="/privacidad">Privacidad</Link> &nbsp;·&nbsp;
             <Link href="/terminos">Términos</Link> &nbsp;·&nbsp;
@@ -734,6 +741,16 @@ export default function Home() {
           </span>
         </div>
       </footer>
+
+      {/* CTA DE LLAMADA FLOTANTE */}
+      <a
+        href={`tel:${PHONE}`}
+        className={`footer-call${cookieVisible ? ' raised' : ''}`}
+        onClick={onPhoneClick}
+        aria-label={`Llamar ahora al ${PHONE_DISPLAY}`}
+      >
+        📞 &nbsp;¡Llama ahora!
+      </a>
 
       {/* COOKIE BANNER */}
       <div id="cookie-banner" className={cookieVisible ? 'visible' : ''} role="dialog" aria-label="Aviso de cookies">

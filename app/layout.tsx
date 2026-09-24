@@ -21,7 +21,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Líneas Móviles | Planes 5G para tu Familia',
   description:
-    'Planes de líneas móviles 5G desde $55/mes. Sin contratos, soporte en español, activación rápida. Cobertura en el 99% de Estados Unidos para tu familia.',
+    'Planes de líneas móviles 5G desde $55/mes + impuestos. Sin contratos, soporte en español, activación rápida. Agente independiente con varios proveedores en Estados Unidos.',
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://linea-latina.com' },
 }
@@ -57,18 +57,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://www.googletagmanager.com/gtag/js?id=AW-18023363833"
           strategy="afterInteractive"
         />
-        {process.env.NODE_ENV !== 'production' && (
-          <>
-            <Script
-              src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"
-              strategy="afterInteractive"
-            />
-            <Script
-              src="https://files.bpcontent.cloud/2026/04/18/01/20260418013659-Y2Z6AC4H.js"
-              strategy="afterInteractive"
-            />
-          </>
-        )}
       </body>
     </html>
   )

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Líneas Móviles | Planes 5G para tu Familia</title>
-<meta name="description" content="Planes de líneas móviles 5G desde $55/mes. Sin contratos, soporte en español, activación rápida. Cobertura en el 99% de Estados Unidos para tu familia.">
+<meta name="description" content="Planes de líneas móviles 5G desde $55/mes + impuestos. Sin contratos, soporte en español, activación rápida. Agente independiente con varios proveedores en Estados Unidos.">
 <link rel="canonical" href="https://linea-latina.com">
 <meta name="robots" content="index, follow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,32 +67,30 @@
   .reveal-delay-3 { transition-delay: .3s; }
 
   /* ── FOOTER CALL BUTTON ── */
-  /* LLAMA AHORA — píldora pegada a la burbuja Botpress */
+  /* CTA de llamada flotante, centrado sobre el borde inferior. */
   .footer-call {
     display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-    position: fixed; bottom: 28px; right: 84px; /* 24px + ~60px burbuja */
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
     z-index: 998;
-    height: 56px; padding: 0 22px;
+    height: 56px; padding: 0 30px;
     background: linear-gradient(90deg, #2563EB 0%, #0A0A0A 100%);
-    color: #fff;
+    color: #fff; white-space: nowrap;
     font-size: .88rem; font-weight: 900; letter-spacing: 1px;
-    text-transform: uppercase;
-    border-radius: 28px 0 0 28px; /* píldora, lado derecho recto para tocar la burbuja */
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 28px;
     border: none; cursor: pointer;
-    box-shadow: -4px 0 18px rgba(37,99,235,0.22);
-    animation: pulse-call 1.5s infinite;
-    white-space: nowrap;
+    box-shadow: 0 6px 24px rgba(37,99,235,.32);
+    animation: pulse-call 1.8s infinite;
     transition: box-shadow .18s, background .18s;
   }
   .footer-call:hover {
-    box-shadow: -4px 0 28px rgba(37,99,235,0.4);
     background: linear-gradient(90deg, #0A0A0A 0%, #2563EB 100%);
+    box-shadow: 0 8px 32px rgba(37,99,235,.5);
   }
   @media (max-width: 768px) {
     .footer-call {
-      right: 76px;
-      height: 50px; padding: 0 16px;
-      font-size: .78rem; border-radius: 25px 0 0 25px;
+      height: 50px; padding: 0 22px;
+      font-size: .78rem; max-width: calc(100vw - 32px);
     }
     .nav-cta-llamativo {
       font-size: .78rem !important;
@@ -101,16 +99,15 @@
     }
   }
   @keyframes pulse-call {
-    0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.18); }
-    70% { box-shadow: 0 0 0 12px rgba(37,99,235,0.08); }
-    100% { box-shadow: 0 0 0 0 rgba(37,99,235,0.18); }
+    0%   { box-shadow: 0 6px 24px rgba(37,99,235,.32), 0 0 0 0 rgba(37,99,235,.25); }
+    70%  { box-shadow: 0 6px 24px rgba(37,99,235,.32), 0 0 0 14px rgba(37,99,235,0); }
+    100% { box-shadow: 0 6px 24px rgba(37,99,235,.32), 0 0 0 0 rgba(37,99,235,0); }
   }
+  @media (prefers-reduced-motion: reduce) { .footer-call { animation: none; } }
 
-  /* Botpress — burbuja nativa visible, pegada a LLAMA AHORA */
-  #bp-web-widget-container {
-    bottom: 24px !important;
-    right: 24px !important;
-  }
+  .plan-tax { font-size: .7rem; color: var(--muted); letter-spacing: .3px; margin-top: -.4rem; }
+  .plan-card.featured .plan-tax { color: rgba(255,255,255,.5); }
+  .plan-cond-link { margin-top: .5rem; text-decoration: underline; }
 
   /* ── NAV ── */
   nav {
@@ -499,6 +496,28 @@
   .plan-card.featured .plan-cond { color: rgba(255,255,255,.25); }
   .plan-cond:hover { color: var(--blue); }
 
+  /* ── QUIENES SOMOS ── */
+  .about-section {
+    padding: 100px max(4%, calc((100% - 860px) / 2));
+    background: var(--cream-dark);
+    border-top: 1px solid var(--border);
+  }
+  .about-header { text-align: center; margin-bottom: 2.5rem; }
+  .about-body { display: flex; flex-direction: column; gap: 1.4rem; }
+  .about-body p { font-size: 1rem; line-height: 1.8; color: var(--muted); }
+  .about-disclaimer {
+    border-left: 3px solid var(--blue);
+    padding: 1.25rem 0 1.25rem 1.5rem;
+    font-size: .95rem; line-height: 1.8; color: var(--black);
+    background: var(--white);
+  }
+  .about-meta {
+    display: flex; flex-wrap: wrap; gap: .5rem 2rem;
+    margin-top: 1rem; padding-top: 1.75rem; border-top: 1px solid var(--border);
+    font-size: .78rem; color: var(--muted); letter-spacing: .3px;
+  }
+  .about-meta strong { color: var(--black); font-weight: 600; }
+
   /* ── FAQ ── */
   .faq-section {
     padding: 100px max(4%, calc((100% - 860px) / 2));
@@ -579,7 +598,18 @@
     transition: background .2s;
   }
   .lead-btn:hover { background: var(--cream); }
-  .lead-note { font-size: .72rem; color: rgba(255,255,255,.2); margin-top: 14px; letter-spacing: .3px; }
+  .lead-consent {
+    grid-column: 1/-1; display: flex; align-items: flex-start; gap: 10px;
+    text-align: left; cursor: pointer; margin-top: 4px;
+  }
+  .lead-consent input {
+    flex-shrink: 0; width: 18px; height: 18px; margin-top: 2px;
+    accent-color: var(--blue); cursor: pointer;
+  }
+  .lead-consent span { font-size: .72rem; color: rgba(255,255,255,.45); line-height: 1.6; }
+  .lead-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .lead-note { font-size: .72rem; color: rgba(255,255,255,.25); margin-top: 14px; letter-spacing: .3px; line-height: 1.6; }
+  .lead-note a { color: rgba(255,255,255,.5); text-decoration: underline; }
 
   /* ── FOOTER ── */
   .footer {
@@ -594,6 +624,10 @@
   }
   .footer-brand img { height: 30px; margin-bottom: 1.2rem; display: block; filter: brightness(10); }
   .footer-brand p { font-size: .82rem; color: rgba(255,255,255,.3); line-height: 1.8; max-width: 240px; }
+  .footer-brand-link { display: inline-block; font-size: .78rem; color: rgba(255,255,255,.5); text-decoration: none; margin-top: .9rem; border-bottom: 1px solid rgba(255,255,255,.2); transition: color .2s, border-color .2s; }
+  .footer-brand-link:hover { color: #7DD3FC; border-color: rgba(125,211,252,.5); }
+  .footer-brand-loc { margin-top: 1.2rem; font-size: .74rem !important; color: rgba(255,255,255,.2) !important; letter-spacing: .3px; }
+  .footer-brand h4,
   .footer-col h4 {
     font-size: .65rem; font-weight: 600; color: rgba(255,255,255,.25);
     letter-spacing: 3.5px; text-transform: uppercase; margin-bottom: 1.2rem;
@@ -658,6 +692,8 @@
     .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
     .footer-bottom { flex-direction: column; text-align: center; }
     .hero-pagination { display: none; }
+    .about-section { padding: 60px 5%; }
+    .about-meta { flex-direction: column; gap: .5rem; }
   }
   @media (max-width: 480px) {
     .hero h1 { font-size: 2.4rem; }
@@ -673,6 +709,7 @@
     <a href="#servicios" class="nav-link">Servicios</a>
     <a href="#familiar" class="nav-link">Familias</a>
     <a href="#planes" class="nav-link">Planes</a>
+    <a href="#quienes-somos" class="nav-link">Nosotros</a>
   </div>
   <div class="nav-right">
     <a href="#faq" class="nav-link">Preguntas</a>
@@ -717,9 +754,9 @@
   </div>
   <div class="hero-content">
     <div class="hero-text">
-      <p class="hero-eyebrow">Red 5G activa en todo USA</p>
+      <p class="hero-eyebrow">Redes 5G nacionales · Varios proveedores</p>
       <h1>Conecta a tu<br><em>Familia</em> hoy.</h1>
-      <p class="hero-sub">Planes sin contratos desde $55/mes. Soporte 100% en español. Activa hoy mismo.</p>
+      <p class="hero-sub">Planes sin contratos desde $55/mes + impuestos. Soporte 100% en español. Activa hoy mismo.</p>
       <div class="hero-actions">
         <a href="tel:+18884702820" class="btn-hero-main">📞 Hablar con un Asesor</a>
         <a href="#planes" class="btn-hero-ghost">Ver planes →</a>
@@ -739,16 +776,16 @@
 <!-- STATS -->
 <div class="stats-strip">
   <div class="stat-item reveal">
-    <div class="stat-num">+10K</div>
-    <div class="stat-label">Clientes Satisfechos</div>
+    <div class="stat-num">0</div>
+    <div class="stat-label">Contratos Forzosos</div>
   </div>
   <div class="stat-item reveal reveal-delay-1">
-    <div class="stat-num">99%</div>
+    <div class="stat-num">USA</div>
     <div class="stat-label">Cobertura Nacional</div>
   </div>
   <div class="stat-item reveal reveal-delay-2">
     <div class="stat-num">$55</div>
-    <div class="stat-label">Desde / mes</div>
+    <div class="stat-label">Desde / mes + imp.</div>
   </div>
   <div class="stat-item reveal reveal-delay-3">
     <div class="stat-num">24/7</div>
@@ -901,7 +938,7 @@
   <div class="section-header reveal">
     <span class="section-eyebrow">Precios Transparentes</span>
     <h2 class="section-title">Elige tu Plan.</h2>
-    <p class="section-sub">Sin letra chica. El precio que ves es el que pagas mes a mes.</p>
+    <p class="section-sub">Precio base del plan. Los impuestos y cargos regulatorios se facturan aparte y varían según tu estado y el proveedor.</p>
   </div>
   <div class="plans-grid">
 
@@ -909,6 +946,7 @@
       <span class="plan-badge">Plan 01</span>
       <div class="plan-name">Básico</div>
       <div class="plan-price"><sup>$</sup>55<sub>/mes</sub></div>
+      <div class="plan-tax">+ impuestos y cargos regulatorios</div>
       <hr class="plan-divider">
       <ul class="plan-features">
         <li>Datos ilimitados 5G</li>
@@ -916,13 +954,15 @@
         <li>Soporte 24/7 en español</li>
       </ul>
       <a href="tel:+18884702820" class="plan-cta">Hablar con un Asesor</a>
-      <a href="terminos.html" class="plan-cond">*Condiciones Aplican</a>
+      <p class="plan-cond">Precio por línea, sin impuestos. Sujeto a disponibilidad del proveedor en tu zona.</p>
+      <a href="terminos.html" class="plan-cond plan-cond-link">Ver condiciones completas</a>
     </div>
 
     <div class="plan-card featured reveal reveal-delay-1">
       <span class="plan-badge">Recomendado</span>
       <div class="plan-name">Familiar</div>
       <div class="plan-price"><sup>$</sup>150<sub>/mes</sub></div>
+      <div class="plan-tax">+ impuestos y cargos regulatorios</div>
       <hr class="plan-divider">
       <ul class="plan-features">
         <li>Hasta 4 líneas incluidas</li>
@@ -930,21 +970,24 @@
         <li>Descuentos por líneas adicionales</li>
       </ul>
       <a href="tel:+18884702820" class="plan-cta">Hablar con un Asesor</a>
-      <a href="terminos.html" class="plan-cond">*Condiciones Aplican</a>
+      <p class="plan-cond">Precio total por hasta 4 líneas, sin impuestos. Requiere activarlas con el mismo proveedor.</p>
+      <a href="terminos.html" class="plan-cond plan-cond-link">Ver condiciones completas</a>
     </div>
 
     <div class="plan-card reveal reveal-delay-2">
       <span class="plan-badge">Plan 03</span>
       <div class="plan-name">Premium</div>
       <div class="plan-price"><sup>$</sup>90<sub>/mes</sub></div>
+      <div class="plan-tax">+ impuestos y cargos regulatorios</div>
       <hr class="plan-divider">
       <ul class="plan-features">
         <li>Datos ilimitados 5G</li>
-        <li>Incluye dispositivo de alta gama</li>
+        <li>Opción de dispositivo de alta gama</li>
         <li>Soporte en español 24/7</li>
       </ul>
       <a href="tel:+18884702820" class="plan-cta">Hablar con un Asesor</a>
-      <a href="terminos.html" class="plan-cond">*Condiciones Aplican</a>
+      <p class="plan-cond">Precio por línea, sin impuestos. El dispositivo y sus condiciones los define el proveedor.</p>
+      <a href="terminos.html" class="plan-cond plan-cond-link">Ver condiciones completas</a>
     </div>
 
   </div>
@@ -957,8 +1000,8 @@
   </div>
   <div class="split-content reveal reveal-delay-1" style="background:var(--cream-dark);">
     <span class="split-tag">Cobertura y Velocidad</span>
-    <h2>El 99% de<br><em>Estados Unidos.</em></h2>
-    <p>Nuestra red cubre el 99% del territorio. Siempre conectado sin importar dónde te encuentres.</p>
+    <h2>Cobertura en<br><em>todo el país.</em></h2>
+    <p>Trabajamos con varios proveedores sobre las principales redes 5G de Estados Unidos. Verificamos contigo la cobertura real en tu zona antes de que contrates.</p>
     <div>
       <a href="tel:+18884702820" class="btn-dark">Verificar Cobertura</a>
     </div>
@@ -977,6 +1020,39 @@
   </div>
   <div class="split-image reveal reveal-delay-1">
     <img src="public/images/altavelocidad.webp" loading="lazy" alt="Alta Velocidad 5G">
+  </div>
+</section>
+
+<!-- QUIENES SOMOS: identidad del anunciante exigida por Google Ads -->
+<section class="about-section" id="quienes-somos">
+  <div class="about-header reveal">
+    <span class="section-eyebrow">Quiénes somos</span>
+    <h2 class="section-title">Un agente,<br><em>no una red.</em></h2>
+  </div>
+  <div class="about-body reveal reveal-delay-1">
+    <p class="about-disclaimer">
+      Connecting S.A. de C.V. es un agente independiente de servicios móviles. Ayudamos a
+      consumidores en Estados Unidos a conocer opciones de telefonía móvil y conectarse con
+      proveedores participantes. No somos una compañía de red móvil ni afirmamos ser
+      representantes de ningún operador salvo cuando se indique expresamente.
+    </p>
+    <p>
+      No trabajamos con un solo operador: comparamos planes de <strong>varios proveedores</strong> y
+      te mostramos cuál se ajusta mejor a tu zona, tu presupuesto y tu consumo. Nuestros agentes
+      atienden en español, verifican la cobertura disponible en tu dirección y te explican las
+      alternativas antes de que contrates. El contrato final de servicio se establece entre tú y
+      la compañía proveedora que elijas.
+    </p>
+    <p>
+      Las marcas, nombres comerciales y logotipos de terceros que aparezcan en este sitio
+      pertenecen a sus respectivos titulares. Los planes, precios y disponibilidad los determina
+      cada proveedor y están sujetos a cambios sin previo aviso.
+    </p>
+    <div class="about-meta">
+      <span><strong>Razón social:</strong> Connecting S.A. de C.V.</span>
+      <span><strong>Operaciones:</strong> Texas, Estados Unidos</span>
+      <span><strong>Contacto:</strong> +1 (888) 470-2820</span>
+    </div>
   </div>
 </section>
 
@@ -1006,14 +1082,28 @@
         ¿El precio de mi factura cambiará después de unos meses?
         <span class="faq-icon">+</span>
       </button>
-      <div class="faq-answer">No. Ofrecemos un bill fijo. El precio que contratas es el que pagas mes a mes, sin cargos ocultos ni "tarifas de promoción" que expiran después de un tiempo.</div>
+      <div class="faq-answer">El precio base del plan no sube por promociones que expiran. Aparte del plan se facturan los impuestos y cargos regulatorios, que varían según tu estado y el proveedor. Te desglosamos el total estimado antes de que contrates.</div>
     </div>
     <div class="faq-item reveal">
       <button class="faq-question" aria-expanded="false">
-        ¿Qué significa que el internet sea "ilimitado"?
+        ¿Qué significa que los datos móviles sean "ilimitados"?
         <span class="faq-icon">+</span>
       </button>
-      <div class="faq-answer">Significa que no tenemos límites de datos (data caps). Puedes navegar, ver películas en 4K, jugar en línea y trabajar todo el mes sin preocuparte por reducciones de velocidad o cargos extra por consumo.</div>
+      <div class="faq-answer">Significa que no pagas cargos extra por consumo. Ten en cuenta que los proveedores aplican priorización de red a partir de cierto consumo mensual, lo que puede reducir la velocidad en horas de congestión. El umbral en GB depende del proveedor y del plan; te lo confirmamos antes de que contrates.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question" aria-expanded="false">
+        ¿En qué condiciones viene el equipo?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Depende del proveedor y del plan. Según el caso el equipo puede entrar financiado a plazos, con un pago inicial o sujeto a permanencia mínima para conservar el descuento. No entregamos equipos por nuestra cuenta: las condiciones, la garantía y el financiamiento los fija el proveedor, y te las explicamos en detalle antes de que firmes.</div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question" aria-expanded="false">
+        ¿Con qué proveedores trabajan?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">Somos un agente independiente y trabajamos con varios proveedores de servicios móviles en Estados Unidos. No pertenecemos a ninguno de ellos. Revisamos contigo cuál conviene más según tu zona, tu presupuesto y el uso que le des a la línea.</div>
     </div>
     <div class="faq-item reveal">
       <button class="faq-question" aria-expanded="false">
@@ -1031,10 +1121,10 @@
     </div>
     <div class="faq-item reveal">
       <button class="faq-question" aria-expanded="false">
-        ¿Puedo cambiar mi plan de velocidad más adelante?
+        ¿Puedo cambiar de plan más adelante?
         <span class="faq-icon">+</span>
       </button>
-      <div class="faq-answer">¡Por supuesto! Al no haber contrato, tienes la flexibilidad de subir o bajar la velocidad de tu plan según tus necesidades actuales, sin complicaciones.</div>
+      <div class="faq-answer">¡Por supuesto! Al no haber contrato, puedes subir o bajar de plan según tus necesidades. Como trabajamos con varios proveedores, también podemos revisar contigo si otro se ajusta mejor.</div>
     </div>
   </div>
 </section>
@@ -1049,21 +1139,26 @@
     <input id="lm-phone"   class="lead-input" type="tel"   placeholder="Número de teléfono" required>
     <input id="lm-email"   class="lead-input" type="email" placeholder="Correo electrónico" required>
     <input id="lm-address" class="lead-input" type="text"  placeholder="Dirección"          required>
-    <button type="submit" class="lead-btn">Que me llamen →</button>
+    <label class="lead-consent">
+      <input id="lm-consent" type="checkbox" required>
+      <span>Autorizo a Connecting S.A. de C.V. y a los proveedores participantes a contactarme al número que proporcioné, mediante llamadas y mensajes de texto, incluidos sistemas automatizados o mensajes pregrabados, con fines comerciales. Entiendo que este consentimiento no es condición para contratar ningún servicio y que puedo revocarlo en cualquier momento respondiendo STOP o pidiéndolo a un asesor. Aplican tarifas de mensajes y datos.</span>
+    </label>
+    <button type="submit" class="lead-btn" disabled>Que me llamen →</button>
   </form>
-  <p style="font-size:.72rem;color:rgba(255,255,255,.25);max-width:540px;margin:12px auto 0;line-height:1.6;">
-    Al enviar este formulario, usted acepta recibir llamadas y mensajes de texto de Connecting relacionados con nuestros servicios. Puede solicitar que lo retiremos de nuestra lista de contacto en cualquier momento. Aplican tarifas de mensajes y datos.
-  </p>
   <p id="lm-success" style="display:none;margin-top:16px;color:rgba(255,255,255,.7);font-size:.9rem;">✓ Recibido. Te llamamos en menos de 10 minutos.</p>
   <p id="lm-error"   style="display:none;margin-top:16px;color:#F87171;font-size:.85rem;">Error al enviar. Intenta de nuevo.</p>
-  <p class="lead-note">No compartimos tus datos. Solo te contactamos una vez.</p>
+  <p class="lead-note">Tratamos tus datos conforme a nuestra <a href="privacidad.html">Política de Privacidad</a>.
+    Puedes pedir que te retiremos de la lista de contacto en cualquier momento.</p>
 </section>
 
 <!-- FOOTER -->
 <footer class="footer" id="contacto">
   <div class="footer-grid">
     <div class="footer-brand">
-      <p>Proveedor independiente de servicios móviles en las mejores redes 5G de Estados Unidos. Texas, EE.UU.</p>
+      <h4>Quiénes Somos</h4>
+      <p>Agente independiente de servicios móviles. Comparamos planes de varios proveedores participantes en las mejores redes 5G de Estados Unidos.</p>
+      <a href="#quienes-somos" class="footer-brand-link">Conocer más →</a>
+      <p class="footer-brand-loc">Texas, EE.UU.</p>
     </div>
     <div class="footer-col">
       <h4>Servicios</h4>
@@ -1074,6 +1169,7 @@
     </div>
     <div class="footer-col">
       <h4>Empresa</h4>
+      <a href="#quienes-somos">Quiénes Somos</a>
       <a href="#cobertura">Cobertura</a>
       <a href="#faq">Preguntas Frecuentes</a>
       <a href="privacidad.html">Privacidad</a>
@@ -1086,10 +1182,12 @@
       <a>Texas, Estados Unidos</a>
     </div>
   </div>
-  <button type="button" class="footer-call" id="llama-ahora-btn">🔥 &nbsp;¡LLAMA AHORA!</button>
+  <a href="tel:+18884702820" class="footer-call" aria-label="Llamar ahora al +1 (888) 470-2820">
+    📞 &nbsp;¡Llama ahora!
+  </a>
 
   <div class="footer-bottom">
-    <span>© 2026 Connecting S.A. de C.V. · Proveedor independiente de servicios móviles.</span>
+    <span>© 2026 Connecting S.A. de C.V. · Agente independiente de servicios móviles.</span>
     <span>
       <a href="privacidad.html">Privacidad</a> &nbsp;·&nbsp;
       <a href="terminos.html">Términos</a> &nbsp;·&nbsp;
@@ -1193,17 +1291,29 @@
 (function(){
   var form = document.getElementById('lead-magnet-form');
   var btn  = form.querySelector('button[type="submit"]');
+  var box  = document.getElementById('lm-consent');
+
+  /* TCPA: texto exacto que ve y acepta el usuario; viaja con el lead como prueba. */
+  var TCPA_CONSENT_TEXT = box.nextElementSibling.textContent.replace(/\s+/g, ' ').trim();
+
+  /* El boton solo se habilita con la casilla marcada. */
+  box.addEventListener('change', function(){ btn.disabled = !box.checked; });
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
     var name    = document.getElementById('lm-name').value.trim();
     var phone   = document.getElementById('lm-phone').value.trim();
     var email   = document.getElementById('lm-email').value.trim();
     var address = document.getElementById('lm-address').value.trim();
-    if(!name || !phone || !email || !address) return;
+    var consent = document.getElementById('lm-consent').checked;
+    if(!name || !phone || !email || !address || !consent) return;
     btn.disabled = true; btn.textContent = 'Enviando...';
     fetch('/api/contact',{
       method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({name:name, phone:phone, email:email, address:address})
+      body: JSON.stringify({
+        name:name, phone:phone, email:email, address:address,
+        consent:true, consentText:TCPA_CONSENT_TEXT, consentAt:new Date().toISOString()
+      })
     })
     .then(function(r){ return r.json(); })
     .then(function(){
@@ -1215,7 +1325,7 @@
       document.getElementById('lm-success').style.display='block';
     })
     .catch(function(){
-      btn.disabled=false; btn.textContent='Que me llamen →';
+      btn.disabled=!box.checked; btn.textContent='Que me llamen →';
       document.getElementById('lm-error').style.display='block';
     });
   });
@@ -1233,23 +1343,6 @@
 
   var ccpa = document.getElementById('ccpa-link');
   if(ccpa) ccpa.addEventListener('click',function(e){ e.preventDefault(); });
-}());
-</script>
-
-<!-- Botpress Webchat -->
-<script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js"></script>
-<script src="https://files.bpcontent.cloud/2026/04/18/01/20260418013659-Y2Z6AC4H.js" defer></script>
-<script>
-(function(){
-  var btn = document.getElementById('llama-ahora-btn');
-  function openChat(){
-    if(window.botpress && typeof window.botpress.open === 'function'){
-      window.botpress.open();
-    } else if(window.botpressWebChat && typeof window.botpressWebChat.sendEvent === 'function'){
-      window.botpressWebChat.sendEvent({ type: 'show' });
-    }
-  }
-  btn.addEventListener('click', openChat);
 }());
 </script>
 

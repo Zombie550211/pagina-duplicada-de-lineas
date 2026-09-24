@@ -33,7 +33,7 @@ const sections = [
   },
   {
     title: 'Consentimiento para Comunicaciones (TCPA)',
-    body: 'Cuando nos da su número de teléfono en nuestra página web o en formularios, usted está de acuerdo en que le llamemos o le enviemos mensajes. Estos mensajes tratarán sobre cómo configurar su servicio, ayuda técnica y ofertas especiales. Si cambia de opinión, puede pedirnos que no le llamemos más, y lo añadiremos a nuestra lista interna de "No llamar".',
+    body: 'Solo le contactamos si marcó de forma expresa la casilla de autorización del formulario, que nunca viene premarcada. Esos mensajes tratarán sobre cómo configurar su servicio, ayuda técnica y ofertas especiales. Este consentimiento no es condición para contratar ningún servicio. Si cambia de opinión, puede pedirnos que no le llamemos más respondiendo STOP o llamando al +1 (888) 470-2820, y lo añadiremos a nuestra lista interna de "No llamar".',
   },
   {
     title: 'Limitación de Responsabilidad',
