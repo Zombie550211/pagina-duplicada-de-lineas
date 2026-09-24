@@ -31,22 +31,35 @@ Variable de entorno en Amplify: `NODE_ENV=production`.
 
 ## Captación de leads: solo en local
 
-El formulario y el chatbot de Botpress existen en el código pero **no se compilan ni se sirven en
-producción**. Están atados a `NODE_ENV`, no a una variable de la consola, así que no se pueden
-activar por accidente desde Amplify.
+El formulario existe en el código pero **no se compila ni se sirve en producción**. Está atado a
+`NODE_ENV`, no a una variable de la consola, así que no se puede activar por accidente desde
+Amplify.
 
 | Elemento | Producción | `npm run dev` |
 |---|---|---|
 | Sección del formulario | no se renderiza | funciona |
-| Scripts de Botpress | no se cargan | funcionan |
 | `/api/contact` | 404 | funciona |
-| `/api/chatbot-lead` | 404 | funciona |
 
-En local, `/api/contact` necesita `RESEND_API_KEY` y `/api/chatbot-lead` necesita
-`WEBHOOK_LINEAS_KEY` (la que valida el CRM). Ponlas en `.env.local`, nunca en el repo.
+El chatbot de Botpress se eliminó por completo el 24 de septiembre de 2026 (scripts, CSS, relay
+de leads, dominios en la CSP y la ruta `/api/chatbot-lead`, que quedó sin consumidores).
+
+En local, `/api/contact` necesita `RESEND_API_KEY`, `LEAD_TO_EMAIL` y opcionalmente
+`LEAD_FROM_EMAIL`. Copia `.env.example` a `.env.local`; nunca pongas claves en el repo.
+`onboarding@resend.dev` solo entrega correo a la cuenta dueña de Resend: para un buzón
+corporativo hay que verificar el dominio en Resend.
 
 La única conversión medible en producción es el clic a teléfono (`phone_call_click`), con el tag
 `AW-18023363833`.
+
+### Consentimiento TCPA
+
+El formulario exige una casilla marcada de forma expresa, nunca premarcada, y el servidor la
+valida con `z.literal(true)`. Cada lead archiva el texto exacto que el usuario aceptó, la marca de
+tiempo y la IP: TCPA obliga a **demostrar** el consentimiento, no solo a pedirlo.
+
+El texto vive duplicado en `TCPA_CONSENT_TEXT` (`app/page.tsx`) y en el markup de `index.html`, y
+debe permanecer idéntico en ambos. Cambiarlo invalida los consentimientos recogidos bajo la
+versión anterior, así que se versiona, no se edita a la ligera.
 
 ## Seguridad
 
@@ -72,6 +85,6 @@ Fuera de local, el CSP no incluye los dominios de Botpress.
 
 ## El CRM es otro sistema
 
-`app/api/chatbot-lead/route.ts` reenvía al webhook del CRM en
-`agentes-49dr.onrender.com`. Ese servicio **sigue en Render** y es independiente de esta landing:
-no se toca en esta migración. Solo se invoca en local.
+El CRM vive en `agentes-49dr.onrender.com`, **sigue en Render** y es independiente de esta
+landing. Desde el 24 de septiembre de 2026 esta landing ya no lo invoca: la ruta que lo hacía
+(`/api/chatbot-lead`) se eliminó junto con el chatbot, y con ella el uso de `WEBHOOK_LINEAS_KEY`.
