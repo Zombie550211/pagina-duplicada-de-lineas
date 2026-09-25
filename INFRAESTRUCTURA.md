@@ -66,6 +66,21 @@ consentimientos recogidos bajo la versión anterior, así que se versiona, no se
 y `Permissions-Policy`; `poweredByHeader` desactivado. Amplify no inyecta ninguna por su cuenta.
 Fuera de local, el CSP no incluye los dominios de Botpress.
 
+## Reglas de enrutado en Amplify
+
+Una sola, creada el 25 de septiembre de 2026:
+
+```
+https://www.linea-latina.com  →  https://linea-latina.com   301
+```
+
+Antes había heredada una regla `/<*>` → `/index.html` con estado `404-200`: la plantilla de un
+sitio estático tipo SPA, que convertía cualquier ruta inexistente en un 200 con la portada —un
+soft-404 que Google penaliza— y que además apuntaba al `index.html` ya eliminado. Se quitó. Next
+gestiona sus propias 404 en `WEB_COMPUTE`; **no reintroducir esa regla.**
+
+Verificado en producción: `www` responde 301 al apex, el apex 200 y una ruta inexistente 404.
+
 ## Coherencia del contenido publicitario
 
 Auditado el 25 de septiembre de 2026. La landing afirmaba cosas que sus propios textos legales y
@@ -93,18 +108,55 @@ Los duplicados muertos (`index.html`, `terminos.html`, `privacidad.html` y `fanp
 eliminaron en el mismo commit. Next 16 no los servía, pero contenían precios viejos y claims ya
 retirados: material publicitario listo para publicarse por accidente. **La única fuente es `app/`.**
 
+## Credenciales de AWS en esta máquina
+
+Dos perfiles, y el que sirve **no es el que está por defecto**:
+
+| Perfil | Usuario IAM | Alcance |
+|---|---|---|
+| `default` | `crm-migration` | solo el CRM. No ve Route 53 ni Amplify |
+| `connecting` | `connecting-deploy` | Route 53, ACM, S3, CloudFront y Amplify |
+
+Para tocar DNS o hosting: `export AWS_PROFILE=connecting`. Con el perfil por defecto todo
+responde `AccessDenied`, que parece falta de permisos en la cuenta y no lo es.
+
+## Correo: el dominio no envía
+
+Cerrado el 25 de septiembre de 2026. La zona no tiene MX —el dominio no recibe correo— y
+tampoco envía, así que la postura es de rechazo total:
+
+```
+linea-latina.com          TXT  "v=spf1 -all"
+_dmarc.linea-latina.com   TXT  "v=DMARC1; p=reject; sp=reject; adkim=s; aspf=s"
+```
+
+Sin `rua=`: ese campo publica un buzón en un registro DNS consultable por cualquiera. La
+protección funciona igual; solo no llegan los informes agregados.
+
+**`-all` prohíbe todo envío desde el dominio.** El día que se verifique `linea-latina.com` en
+Resend para `LEAD_FROM_EMAIL`, este registro bloqueará esos correos: hay que pasarlo a
+`v=spf1 include:_spf.resend.com -all` en el mismo cambio, no después.
+
 ## Deuda técnica
 
 1. **Rate limit en memoria.** `app/api/contact/route.ts` usa un `Map` por instancia: inservible en
    el compute serverless si algún día se reactiva la ruta en producción. Mitigación: regla
    rate-based de AWS WAF o un contador en DynamoDB.
-2. **`www` no redirige al apex**, sirve el mismo contenido en paralelo: contenido duplicado para
-   Google. Se configura en Amplify → Dominios personalizados.
-3. **Sin SPF ni DMARC** en la zona. Cualquiera puede falsificar correo desde `@linea-latina.com`.
-   Se resuelve con dos registros TXT en Route 53:
-   `linea-latina.com TXT "v=spf1 -all"` y
-   `_dmarc.linea-latina.com TXT "v=DMARC1; p=reject; rua=mailto:<tu-correo>"`.
-4. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
+2. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
+3. **Los otros 7 dominios de la cuenta siguen sin SPF ni DMARC.** Ver abajo.
+
+## Los demás dominios de la cuenta
+
+La cuenta `964060772387` aloja 8 zonas de landings, todas servidas por CloudFront:
+`linea-latina.com`, `planeslineasmoviles.com`, `lineas-moviles.com`, `asistenteinternet.com`,
+`speed-internet.com`, `offers-mobile.com`, `internetparatuhogar.com` y `tumovilplan.com`.
+
+Auditadas el 25 de septiembre de 2026: **ninguna tenía SPF ni DMARC, ninguna tenía MX y en todas
+`www` servía el mismo contenido que el apex en paralelo.** El problema no era de esta landing,
+era de la cuenta entera. Solo `linea-latina.com` está corregida; las otras siete siguen abiertas
+a suplantación de correo y sirviendo contenido duplicado a Google.
+
+Como ninguna recibe correo, a todas les aplica el mismo par de registros de arriba sin cambios.
 
 ## El CRM es otro sistema
 
