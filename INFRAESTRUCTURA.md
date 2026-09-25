@@ -57,9 +57,8 @@ El formulario exige una casilla marcada de forma expresa, nunca premarcada, y el
 valida con `z.literal(true)`. Cada lead archiva el texto exacto que el usuario aceptó, la marca de
 tiempo y la IP: TCPA obliga a **demostrar** el consentimiento, no solo a pedirlo.
 
-El texto vive duplicado en `TCPA_CONSENT_TEXT` (`app/page.tsx`) y en el markup de `index.html`, y
-debe permanecer idéntico en ambos. Cambiarlo invalida los consentimientos recogidos bajo la
-versión anterior, así que se versiona, no se edita a la ligera.
+El texto vive en un solo sitio, `TCPA_CONSENT_TEXT` (`app/page.tsx`). Cambiarlo invalida los
+consentimientos recogidos bajo la versión anterior, así que se versiona, no se edita a la ligera.
 
 ## Seguridad
 
@@ -67,21 +66,45 @@ versión anterior, así que se versiona, no se edita a la ligera.
 y `Permissions-Policy`; `poweredByHeader` desactivado. Amplify no inyecta ninguna por su cuenta.
 Fuera de local, el CSP no incluye los dominios de Botpress.
 
+## Coherencia del contenido publicitario
+
+Auditado el 25 de septiembre de 2026. La landing afirmaba cosas que sus propios textos legales y
+su FAQ desmentían; todo eso se corrigió en el mismo pase:
+
+- El soporte se anunciaba **24/7** en cuatro sitios mientras el footer declaraba el horario real.
+  Ahora hay una sola fuente de verdad, `SUPPORT_HOURS` en `app/page.tsx`: **Lun–Dom 8AM–9PM CT**.
+  Si cambia el horario de la operación, se cambia ahí y se propaga a stats, beneficios, planes y
+  footer. Los Términos y la Privacidad lo repiten en prosa: hay que tocarlos a mano.
+- **"Sin data caps"** contradecía el FAQ, que sí revela la priorización de red. Manda el FAQ: la
+  FTC obliga a revelar el throttling, no a esconderlo.
+- **Superlativos de red** ("la red 5G más rápida", "hasta 1 Gbps") eran incompatibles con
+  presentarse como agente neutral de varios proveedores. Fuera. No se reintroducen: un agente no
+  puede reclamar el rendimiento de una red que no opera.
+- Los **legales hablaban en primera persona como si Connecting fuese el operador** ("activar su
+  línea", "call center autorizado"). Reescritos como agente. Esto es exactamente el patrón de
+  tergiversación por el que Google Ads suspende cuentas.
+- Los Términos decían que el precio **podía incluir impuestos**; la landing los factura aparte.
+  Manda la landing: precio base del plan, impuestos y cargos regulatorios por separado.
+- El botón **"No vender mis datos (CCPA)"** ejercía un derecho que la Política de Privacidad no
+  documentaba, y esa política además afirmaba no compartir datos. Añadida la sección 8 (CCPA/CPRA)
+  y corregida la 3.
+
+Los duplicados muertos (`index.html`, `terminos.html`, `privacidad.html` y `fanpage/`) se
+eliminaron en el mismo commit. Next 16 no los servía, pero contenían precios viejos y claims ya
+retirados: material publicitario listo para publicarse por accidente. **La única fuente es `app/`.**
+
 ## Deuda técnica
 
-1. **`index.html` duplica `app/page.tsx`.** Next 16 no sirve el HTML de la raíz: la página real es
-   `app/page.tsx`. El commit `c2917c0` metió la conversión de formulario solo en `index.html`.
-   Hoy da igual —no hay formulario en producción—, pero los dos archivos siguen divergiendo.
-2. **Rate limit en memoria.** `app/api/contact/route.ts` usa un `Map` por instancia: inservible en
+1. **Rate limit en memoria.** `app/api/contact/route.ts` usa un `Map` por instancia: inservible en
    el compute serverless si algún día se reactiva la ruta en producción. Mitigación: regla
    rate-based de AWS WAF o un contador en DynamoDB.
-3. **`www` no redirige al apex**, sirve el mismo contenido en paralelo: contenido duplicado para
+2. **`www` no redirige al apex**, sirve el mismo contenido en paralelo: contenido duplicado para
    Google. Se configura en Amplify → Dominios personalizados.
-4. **Sin SPF ni DMARC** en la zona. Cualquiera puede falsificar correo desde `@linea-latina.com`.
+3. **Sin SPF ni DMARC** en la zona. Cualquiera puede falsificar correo desde `@linea-latina.com`.
    Se resuelve con dos registros TXT en Route 53:
    `linea-latina.com TXT "v=spf1 -all"` y
    `_dmarc.linea-latina.com TXT "v=DMARC1; p=reject; rua=mailto:<tu-correo>"`.
-5. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
+4. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
 
 ## El CRM es otro sistema
 

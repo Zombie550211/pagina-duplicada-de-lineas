@@ -4,7 +4,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'Términos y Condiciones | Connecting',
-  description: 'Términos y condiciones de servicio de linea-latina.com. Connecting opera como call center autorizado para servicios de telecomunicaciones.',
+  description: 'Términos y condiciones de linea-latina.com. Connecting es un agente independiente que conecta usuarios con proveedores participantes de telefonía móvil.',
   alternates: { canonical: 'https://linea-latina.com/terminos' },
 }
 
@@ -12,24 +12,28 @@ const sections = [
   {
     title: null,
     highlight: true,
-    body: 'Este documento rige el uso de nuestro sitio web. Al navegar en linea-latina.com, el usuario acepta que la información de planes y precios está sujeta a cambios por parte de los proveedores. Nosotros proporcionamos asesoría informativa y técnica, pero el contrato final de servicio se establece entre el cliente y la compañía proveedora seleccionada.\n\nConnecting opera como call center de atención al cliente para servicios de telefonía móvil. Nuestros agentes autorizados atienden llamadas entrantes para verificar disponibilidad y conectar a los usuarios con proveedores participantes.',
-    bullets: ['No somos el proveedor directo del servicio.', 'La disponibilidad y precios pueden variar según ubicación.'],
+    body: 'Este documento rige el uso de nuestro sitio web. Al navegar en linea-latina.com, el usuario acepta que la información de planes y precios está sujeta a cambios por parte de los proveedores. Nosotros proporcionamos asesoría informativa y técnica, pero el contrato final de servicio se establece entre el cliente y la compañía proveedora seleccionada.\n\nConnecting S.A. de C.V. es un agente independiente de servicios móviles. No somos una compañía de red móvil ni representantes de ningún operador, salvo cuando se indique expresamente. Nuestros agentes atienden llamadas para comparar opciones, verificar disponibilidad y conectar a los usuarios con proveedores participantes.',
+    bullets: [
+      'No somos el proveedor del servicio: la línea la presta el operador que usted elija.',
+      'La disponibilidad, los planes y los precios los fija cada proveedor y varían según la ubicación.',
+      'Las marcas y logotipos de terceros pertenecen a sus respectivos titulares.',
+    ],
   },
   {
     title: 'Descripción de los Servicios',
-    body: 'linea-latina.com actúa como agente independiente de servicios de telecomunicaciones, facilitando el acceso a:\n• Telefonía Móvil E-SIM o SIM Física: Planes de voz, texto y datos mediante redes inalámbricas.\n• Telefonía Móvil y Dispositivos con financiamiento: Planes de redes ilimitadas, llamadas ilimitadas dentro de todo el continente americano.',
+    body: 'linea-latina.com actúa como agente independiente de servicios de telecomunicaciones. No prestamos el servicio: facilitamos el acceso a la oferta de los proveedores participantes.\n• Telefonía móvil eSIM o SIM física: planes de voz, texto y datos sobre redes inalámbricas de terceros.\n• Dispositivos con financiamiento: el equipo, su garantía y las condiciones de financiamiento los define y presta el proveedor, no Connecting.\n\nEl alcance de las llamadas y los datos incluidos, así como los destinos cubiertos, los determina el plan del proveedor que usted contrate y se le detallan antes de contratar.',
   },
   {
     title: 'Elegibilidad y Contratación',
-    body: 'Para contratar nuestros servicios, el usuario debe:\n• Ser mayor de 18 años.\n• Residir en una zona con cobertura garantizada (sujeta a verificación técnica).\n• Proporcionar información veraz y actualizada durante el proceso de venta telefónica.',
+    body: 'Para contratar a través de nuestra asesoría, el usuario debe:\n• Ser mayor de 18 años.\n• Residir en una zona donde el proveedor elegido ofrezca cobertura, lo que se verifica antes de contratar.\n• Presentar una identificación oficial vigente; aceptamos pasaporte de cualquier país.\n• Proporcionar información veraz y actualizada durante el proceso de venta telefónica.\n\nAlgunos proveedores consultan el historial crediticio, en particular cuando se financia un equipo. Le informamos si aplica en su caso antes de iniciar el trámite.',
   },
   {
-    title: 'Política de Uso Aceptable',
-    body: 'Protegemos tus datos personales conforme a la ley. Los datos recabados en nuestros formularios se utilizan exclusivamente para contactarte y gestionar tu solicitud de servicio.\n\nDivulgación de Afiliación: linea-latina.com puede recibir una comisión por parte de los proveedores de servicios cuando un usuario realiza una contratación a través de nuestra plataforma. Esto no genera un costo adicional para el usuario y nos permite mantener nuestro servicio de asesoría gratuito.',
+    title: 'Divulgación de Afiliación',
+    body: 'linea-latina.com puede recibir una comisión por parte de los proveedores de servicios cuando un usuario realiza una contratación a través de nuestra asesoría. Esto no genera un costo adicional para el usuario y nos permite mantener el servicio de asesoría gratuito.\n\nEsa comisión no condiciona la recomendación: comparamos la oferta de varios proveedores según la cobertura de su zona, su presupuesto y su consumo.',
   },
   {
     title: 'Tarifas, Facturación y Pagos',
-    body: 'Todos los precios se muestran en dólares de los Estados Unidos (USD) y podrían incluir impuestos de la zona, del estado y cargos del gobierno federal que correspondan.',
+    body: 'Todos los precios se muestran en dólares de los Estados Unidos (USD) y corresponden al precio base del plan. Los impuestos locales, estatales y los cargos regulatorios federales se facturan aparte y varían según su estado y el proveedor; no están incluidos en los precios publicados en este sitio.\n\nLa facturación, los métodos de pago y cualquier cargo por activación o equipo los gestiona directamente el proveedor que usted contrate. Le desglosamos el total estimado antes de que contrate.',
   },
   {
     title: 'Consentimiento para Comunicaciones (TCPA)',
@@ -49,7 +53,7 @@ const sections = [
   },
   {
     title: 'Contacto',
-    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en linea-latina.com o llamando al +1 (888) 470-2820.',
+    body: 'Si tiene preguntas sobre estos Términos y Condiciones, puede contactarnos a través de los canales oficiales publicados en linea-latina.com o llamando al +1 (888) 470-2820, de lunes a domingo de 8:00 a. m. a 9:00 p. m. (hora central).',
     phone: '+18884702820',
   },
 ]

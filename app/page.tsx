@@ -29,6 +29,10 @@ const TCPA_CONSENT_TEXT =
 const PHONE = '+18884702820'
 const PHONE_DISPLAY = '+1 (888) 470-2820'
 
+// Horario real de atencion. Se declara una sola vez: antes vivia duplicado como
+// "24/7" en cuatro sitios y como el horario correcto solo en el footer.
+const SUPPORT_HOURS = 'Lun–Dom 8AM–9PM CT'
+
 const heroSlides = [
   { src: '/images/hablando_por_telefono.webp', alt: 'Planes Móviles' },
   { src: '/images/familiaconectada.webp',      alt: 'Familia Conectada' },
@@ -114,7 +118,7 @@ const faqs = [
   },
   {
     q: '¿Necesito una verificación de crédito para aplicar?',
-    a: '¡Al permitir la contratación con pasaporte y no tener contratos a largo plazo, nuestros requisitos son mucho más flexibles que los de las compañías tradicionales. ¡Consulta con nosotros para una aprobación rápida!',
+    a: 'Depende del proveedor y del plan. Para el servicio con pasaporte y sin contrato a largo plazo los requisitos suelen ser más flexibles que los de una contratación tradicional, pero algunos proveedores sí consultan el historial crediticio, sobre todo si financias un equipo. Te confirmamos si aplica en tu caso antes de iniciar el trámite.',
   },
   {
     q: '¿Cuánto tiempo tarda el envío del equipo?',
@@ -380,7 +384,7 @@ export default function Home() {
             <span className="hero-badge">Conectamos familias en todo Estados Unidos</span>
             <p className="hero-eyebrow">Redes 5G nacionales · Varios proveedores</p>
             <h1>Conecta a tu<br /><em>Familia</em> hoy.</h1>
-            <p className="hero-sub">Planes sin contratos desde $55/mes + impuestos. Soporte 100% en español. Activa hoy mismo.</p>
+            <p className="hero-sub">Planes sin contratos desde $55/mes + impuestos por línea individual. Soporte 100% en español. Consulta hoy mismo.</p>
             <div className="hero-actions">
               <a href={`tel:${PHONE}`} className="btn-hero-main" onClick={onPhoneClick}>📞 Hablar con un Asesor</a>
               <Link href="#planes" className="btn-hero-ghost">Ver planes →</Link>
@@ -413,11 +417,13 @@ export default function Home() {
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>,
           },
           {
-            num: `$${cnt}`, label: 'Desde / mes + imp.',
+            num: `$${cnt}`, label: 'Línea individual / mes + imp.',
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
           },
           {
-            num: '24/7', label: 'Soporte en Español',
+            // 8AM–9PM CT los 7 dias: 13 horas. Cabe en el stat sin desbordar y el
+            // horario exacto se da en beneficios, planes y footer.
+            num: '13h', label: 'Soporte diario en español',
             icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
           },
         ].map((s, i) => (
@@ -444,7 +450,7 @@ export default function Home() {
             },
             {
               title: 'Soporte en español',
-              desc: 'Atención 24/7 por agentes nativos que te entienden. Sin barreras de idioma.',
+              desc: `Atención de ${SUPPORT_HOURS} por agentes nativos que te entienden. Sin barreras de idioma.`,
               icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,
             },
             {
@@ -453,8 +459,8 @@ export default function Home() {
               icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M10.54 16.1a6 6 0 0 1 2.92 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>,
             },
             {
-              title: 'Activación express',
-              desc: 'Tu línea activa en menos de 24 horas. Solo necesitas tu pasaporte. Así de simple.',
+              title: 'Activación rápida',
+              desc: 'Aceptamos pasaporte de cualquier país como identificación. El envío del equipo suele agendarse en 24 a 72 horas hábiles según el proveedor.',
               icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>,
             },
           ].map((item, i) => (
@@ -475,7 +481,7 @@ export default function Home() {
         <div className="split-content reveal reveal-delay-1">
           <span className="split-tag">Planes Familiares</span>
           <h2>Ahorra más<br /><em>por línea.</em></h2>
-          <p>Agrega hasta 4 líneas y disfruta de tarifas reducidas. Cuantas más líneas, más ahorras. Toda tu familia en la red 5G más rápida de Estados Unidos.</p>
+          <p>Agrega hasta 4 líneas y disfruta de tarifas reducidas. Cuantas más líneas, más ahorras. Toda tu familia sobre las principales redes 5G de Estados Unidos.</p>
           <div><a href={`tel:${PHONE}`} className="btn-dark" onClick={onPhoneClick}>Hablar con un Asesor</a></div>
         </div>
       </section>
@@ -485,7 +491,7 @@ export default function Home() {
         <div className="split-content reveal">
           <span className="split-tag">Sin Límites</span>
           <h2>Datos<br /><em>ilimitados.</em></h2>
-          <p>Sin data caps, sin sorpresas. Streaming en 4K, videollamadas y gaming todo el mes sin interrupciones ni cargos extra.</p>
+          <p>Sin cargos extra por consumo: usas tus datos todo el mes sin sorpresas en la factura. A partir de cierto consumo los proveedores aplican priorización de red, que puede reducir la velocidad en horas de congestión. El umbral depende del proveedor y del plan, y te lo confirmamos antes de contratar.</p>
           <div><a href={`tel:${PHONE}`} className="btn-outline-white" onClick={onPhoneClick}>Conocer Más</a></div>
         </div>
         <div className="split-image reveal reveal-delay-1">
@@ -547,9 +553,9 @@ export default function Home() {
         </div>
         <div className="plans-grid">
           {[
-            { badge: 'Plan 01',    name: 'Básico',   price: '55',  features: ['Datos ilimitados 5G', 'Llamadas y mensajes ilimitados', 'Soporte 24/7 en español'],           cond: 'Precio por línea, sin impuestos. Sujeto a disponibilidad del proveedor en tu zona.',      featured: false },
+            { badge: 'Plan 01',    name: 'Básico',   price: '55',  features: ['Datos ilimitados 5G', 'Llamadas y mensajes ilimitados', `Soporte en español ${SUPPORT_HOURS}`], cond: 'Precio por línea, sin impuestos. Sujeto a disponibilidad del proveedor en tu zona.',      featured: false },
             { badge: 'Recomendado', name: 'Familiar', price: '150', features: ['Hasta 4 líneas incluidas', 'Datos ilimitados para todos', 'Descuentos por líneas adicionales'], cond: 'Precio total por hasta 4 líneas, sin impuestos. Requiere activarlas con el mismo proveedor.', featured: true  },
-            { badge: 'Plan 03',    name: 'Premium',  price: '90',  features: ['Datos ilimitados 5G', 'Opción de dispositivo de alta gama', 'Soporte en español 24/7'],        cond: 'Precio por línea, sin impuestos. El dispositivo y sus condiciones los define el proveedor.',  featured: false },
+            { badge: 'Plan 03',    name: 'Premium',  price: '90',  features: ['Datos ilimitados 5G', 'Opción de dispositivo de alta gama', `Soporte en español ${SUPPORT_HOURS}`], cond: 'Precio por línea, sin impuestos. El dispositivo y sus condiciones los define el proveedor.',  featured: false },
           ].map((plan, i) => (
             <div
               key={i}
@@ -590,9 +596,9 @@ export default function Home() {
       {/* SPLIT 4: Velocidad */}
       <section className="split split-dark">
         <div className="split-content reveal">
-          <span className="split-tag">5G Ultra Rápido</span>
-          <h2>Hasta<br /><em>1 Gbps.</em></h2>
-          <p>Streaming en HD, videollamadas y gaming sin interrupciones. La conexión más rápida para tu familia, disponible hoy.</p>
+          <span className="split-tag">Velocidad 5G</span>
+          <h2>Velocidad<br /><em>para todo.</em></h2>
+          <p>Streaming en HD, videollamadas y gaming sobre redes 5G nacionales. La velocidad real depende del proveedor, tu dispositivo, la cobertura de tu zona y la congestión de la red.</p>
           <div><a href={`tel:${PHONE}`} className="btn-outline-white" onClick={onPhoneClick}>Hablar con un Asesor</a></div>
         </div>
         <div className="split-image reveal reveal-delay-1">
@@ -723,7 +729,7 @@ export default function Home() {
           <div className="footer-col">
             <h4>Contacto</h4>
             <a href={`tel:${PHONE}`} onClick={onPhoneClick}>{PHONE_DISPLAY}</a>
-            <a>Lun–Dom 8:00AM–9:00PM</a>
+            <a>{SUPPORT_HOURS}</a>
             <a>Texas, Estados Unidos</a>
           </div>
         </div>

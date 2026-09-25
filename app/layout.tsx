@@ -21,7 +21,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: 'Líneas Móviles | Planes 5G para tu Familia',
   description:
-    'Planes de líneas móviles 5G desde $55/mes + impuestos. Sin contratos, soporte en español, activación rápida. Agente independiente con varios proveedores en Estados Unidos.',
+    'Planes de líneas móviles 5G desde $55/mes + impuestos por línea individual. Sin contratos, soporte en español de Lun a Dom. Agente independiente con varios proveedores en Estados Unidos.',
   robots: { index: true, follow: true },
   alternates: { canonical: 'https://linea-latina.com' },
 }
