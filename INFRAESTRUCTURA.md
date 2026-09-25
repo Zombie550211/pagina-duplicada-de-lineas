@@ -143,7 +143,7 @@ Resend para `LEAD_FROM_EMAIL`, este registro bloqueará esos correos: hay que pa
    el compute serverless si algún día se reactiva la ruta en producción. Mitigación: regla
    rate-based de AWS WAF o un contador en DynamoDB.
 2. **MFA pendiente en el usuario raíz de AWS.** Esa cuenta aloja además el CRM y su RDS.
-3. **Los otros 7 dominios de la cuenta siguen sin SPF ni DMARC.** Ver abajo.
+3. **`www` sigue sirviendo contenido duplicado en los otros 7 dominios.** Ver abajo.
 
 ## Los demás dominios de la cuenta
 
@@ -153,10 +153,25 @@ La cuenta `964060772387` aloja 8 zonas de landings, todas servidas por CloudFron
 
 Auditadas el 25 de septiembre de 2026: **ninguna tenía SPF ni DMARC, ninguna tenía MX y en todas
 `www` servía el mismo contenido que el apex en paralelo.** El problema no era de esta landing,
-era de la cuenta entera. Solo `linea-latina.com` está corregida; las otras siete siguen abiertas
-a suplantación de correo y sirviendo contenido duplicado a Google.
+era de la cuenta entera.
 
-Como ninguna recibe correo, a todas les aplica el mismo par de registros de arriba sin cambios.
+**SPF y DMARC: cerrado en las 8 el 25 de septiembre de 2026.** Ninguna recibe correo, así que a
+todas les aplicó el mismo par de registros, con una excepción: `speed-internet.com` ya tenía un
+TXT de verificación de Search Console en el apex. Ahí el SPF se añadió **al mismo recordset**,
+como segundo valor. Un `UPSERT` reemplaza el recordset entero: crear el SPF sin arrastrar el
+valor existente habría borrado la verificación y tumbado la propiedad en Search Console. Antes de
+tocar un TXT de apex hay que leer lo que ya hay.
+
+Queda pendiente `www` → apex en las otras siete. No es copiar y pegar como el DNS: cada una
+cuelga de una distribución de CloudFront distinta y la redirección 301 necesita una CloudFront
+Function, para la que `connecting-deploy` tiene denegado `CreateFunction`. La excepción fue
+`linea-latina.com`, que al estar en Amplify se resolvió con una custom rule sin permisos extra.
+
+### Zona basura
+
+La cuenta tiene una novena hosted zone llamada `servidordecrm\100gmail.com` — una dirección de
+correo creada como si fuese un dominio. No resuelve nada y cuesta $0.50/mes. Conviene borrarla
+tras confirmar que ningún registro apunta ahí.
 
 ## El CRM es otro sistema
 
