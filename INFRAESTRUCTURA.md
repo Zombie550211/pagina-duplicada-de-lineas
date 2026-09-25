@@ -175,11 +175,18 @@ tras confirmar que ningún registro apunta ahí.
 
 ## El CRM es otro sistema
 
-El CRM corre en **EC2**, no en Render: salió de ahí y esta nota lo daba por alojado en
-`agentes-49dr.onrender.com` hasta que se corrigió el 25 de septiembre de 2026. Es un sistema
-independiente de esta landing y se despliega solo, sin GitHub Actions —bloqueado por facturación
-en esa cuenta—: `crm-auto-desplegar.timer` consulta `main` cada minuto y aplica los commits
-nuevos con retorno automático si fallan. El código vive en `CRM_CONNECTING`, no aquí.
+El CRM corre en **EC2** y se entra por el **DNS público de la instancia**: no tiene dominio
+propio, así que ninguna de las zonas de Route 53 de esta cuenta le da servicio. Render se dio de
+baja por completo; esta nota lo daba por alojado en `agentes-49dr.onrender.com` hasta que se
+corrigió el 25 de septiembre de 2026.
+
+Es un sistema independiente de esta landing y se despliega solo, sin GitHub Actions —bloqueado
+por facturación en esa cuenta—: `crm-auto-desplegar.timer` consulta `main` cada minuto y aplica
+los commits nuevos con retorno automático si fallan. El código vive en `CRM_CONNECTING`, no aquí.
+
+**Entrar por el DNS de EC2 impide tener TLS válido:** ni Let's Encrypt ni ACM emiten certificados
+para `*.amazonaws.com`, que es de AWS. Está anotado como riesgo en el repo del CRM, que es donde
+toca resolverlo.
 
 Desde el 24 de septiembre de 2026 esta landing ya no lo invoca: la ruta que lo hacía
 (`/api/chatbot-lead`) se eliminó junto con el chatbot, y con ella el uso de `WEBHOOK_LINEAS_KEY`.
