@@ -175,6 +175,12 @@ tras confirmar que ningún registro apunta ahí.
 
 ## El CRM es otro sistema
 
-El CRM vive en `agentes-49dr.onrender.com`, **sigue en Render** y es independiente de esta
-landing. Desde el 24 de septiembre de 2026 esta landing ya no lo invoca: la ruta que lo hacía
+El CRM corre en **EC2**, no en Render: salió de ahí y esta nota lo daba por alojado en
+`agentes-49dr.onrender.com` hasta que se corrigió el 25 de septiembre de 2026. Es un sistema
+independiente de esta landing y se despliega solo, sin GitHub Actions —bloqueado por facturación
+en esa cuenta—: `crm-auto-desplegar.timer` consulta `main` cada minuto y aplica los commits
+nuevos con retorno automático si fallan. El código vive en `CRM_CONNECTING`, no aquí.
+
+Desde el 24 de septiembre de 2026 esta landing ya no lo invoca: la ruta que lo hacía
 (`/api/chatbot-lead`) se eliminó junto con el chatbot, y con ella el uso de `WEBHOOK_LINEAS_KEY`.
+No queda ninguna dependencia entre los dos sistemas.
